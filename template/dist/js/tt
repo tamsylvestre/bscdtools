@@ -1,0 +1,23 @@
+function ActiviteExepire(activites)
+{
+    return (activites).filter(isExpered(element));
+}
+
+function isExpered(activite)
+{
+    var date = new Date();
+    var activitedate = new Date(activite.datefin);
+    
+    if(activite.status != 'CLOTURE' && activitedate < date)
+        return true;
+    else
+        return false;
+}
+
+function bagdeExpired( test )
+{
+    if(test)
+        return "<span class='badge bg-danger'> Expiré </span>";
+}
+
+bagdeExpired( isExpered(element) )
