@@ -69,7 +69,6 @@
             require("template/aci_brute.php");
         }
 
-        
         function Unapplied_aci()
         {
             $fichiers = [];
@@ -118,9 +117,19 @@
                 if(isset($_REQUEST['motif']))
                 {
                     $error = "ACI ".$_REQUEST['reference']." annulé!!!";
-                    $request = "UPDATE transactions SET statusId=5 , reasonForRefusal='".$_REQUEST['motif']."' WHERE reference IN ('".$_REQUEST['reference']."')";
-                    
-                    $request = "DELETE FROM transaction_details WHERE transactionId IN (SELECT id FROM transactions WHERE REFERENCE IN ('".$_REQUEST['reference']."'))";
+                    $request = "UPDATE transactions 
+                    SET 
+                    statusId=5, 
+                    reasonForRefusal= :motif,
+                    RefusalBy= :RefusalBy, 
+                    RefusalAt=NOW() 
+                    WHERE reference = :reference";
+                    $params =['motif'=>$_REQUEST['motif'],'RefusalBy'=>$_SESSION['user']->cn,'reference'=>$_REQUEST['reference']];
+                    $this->repo->update($request,$params);
+
+                    $request = "DELETE FROM transaction_details WHERE transactionId IN (SELECT id FROM transactions WHERE reference = :reference)";
+                    $params =['reference'=>$_REQUEST['reference']];
+                    $this->repo->delete($request,$params);
                 }
 
                 $request = 

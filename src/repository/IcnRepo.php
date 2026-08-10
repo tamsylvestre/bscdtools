@@ -153,4 +153,66 @@
 
         }
 
+        
+
+        public function insert($request,$params)
+        {
+            try{
+                $statement = $this->dbconnect->getICNDb()->prepare($request);
+
+                foreach ($params as $key => $value) {
+                    $statement->bindValue(':'.$key, $value);
+                }
+
+                $statement->execute();
+                
+            }
+            catch(Exception $e)
+            {
+                $error = $e->getMessage();
+                require("template/error.php");
+                die();
+            }
+        }
+
+        public function update($request,$params)
+        {
+            try{
+                $statement = $this->dbconnect->getICNDb()->prepare($request);
+
+                foreach ($params as $key => $value) {
+                    $statement->bindValue(':'.$key, $value);
+                }
+
+                $statement->execute();
+                
+            }
+            catch(Exception $e)
+            {
+                $error = $e->getMessage();
+                require("template/error.php");
+                die();
+            }
+        }
+
+        public function delete($request,$params)
+        {
+            try{
+                $statement = $this->dbconnect->getICNDb()->prepare($request);
+
+                foreach ($params as $key => $value) {
+                    $statement->bindValue(':'.$key, $value);
+                }
+
+                $statement->execute();
+                
+            }
+            catch(Exception $e)
+            {
+                $error = $e->getMessage();
+                require("template/error.php");
+                die();
+            }
+        }
+
     }

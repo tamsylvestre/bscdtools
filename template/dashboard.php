@@ -145,7 +145,7 @@
                         <ol>
                             <li><a href="<?= BASE_URL ?>/batch" target="_blank"> BATCH BT </a></li>
                             <li><a href="<?= BASE_URL ?>/batch/historique/0" target="_blank"> Historique BATCH BT </a></li>
-                            <li><a href="<?= BASE_URL ?>/batch_mt" target="_blank"> BATCH GBT & MT </a></li>                          
+                            <li><a href="<?= BASE_URL ?>/batch/batch_mt" target="_blank"> BATCH GBT & MT </a></li>                          
                         </ol>
                     </div>
                     <!-- /.card-body -->

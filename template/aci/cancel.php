@@ -88,6 +88,13 @@
                                 <input type="text" class="form-control float-right" value="<?= (sizeof($aci) > 0) ? $aci['region'] : "" ?>" disabled>
                             </div>
 
+                            <div class="form-group">
+                                <label> <code> Refusal : </code> </label>
+                                <textarea class="form-control" disabled>
+                                    <?= (sizeof($aci) > 0) ? $aci['reasonForRefusal'] : "" ?>
+                                </textarea>
+                            </div>
+
                         </div>
                     </div>
 

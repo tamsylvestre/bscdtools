@@ -1,55 +1,55 @@
 <?php
 
-    define('ROOT',str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']));
-    define('BASE_URL', '/bscdtools');
+define('ROOT', str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']));
+// define('BASE_URL', '/bscdtools');
+$base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 
-    require __DIR__ . '/vendor/autoload.php';
+define('BASE_URL', $base === '/' ? '' : $base);
 
-    require_once("src/lib/database.php");
-    require_once("src/lib/utils.php");
-    require_once("src/model/user.php");
+require __DIR__ . '/vendor/autoload.php';
 
-    // session_set_cookie_params(180);
-    session_start();
+require_once("src/lib/database.php");
+require_once("src/lib/utils.php");
+require_once("src/model/user.php");
 
-    if($_GET['action'])
-    {
-        $params = explode('/',$_GET['action']);
+// session_set_cookie_params(180);
+session_start();
 
-        if( $params[0]!="" ){
-            $controller = $params[0];
-            $action = "";
+if ($_GET['action']) {
+    $params = explode('/', $_GET['action']);
 
-            if(isset($params[1])){ $action = $params[1]; }
+    if ($params[0] != "") {
+        $controller = $params[0];
+        $action = "";
 
-            require_once(ROOT.'src/controller/'.$controller.'.php');
+        if (isset($params[1])) {
+            $action = $params[1];
+        }
 
-            $controller_name = 'C_'.ucfirst($controller);
-            $controller_object = new $controller_name();
+        require_once(ROOT . 'src/controller/' . $controller . '.php');
 
-            if(method_exists($controller_object::class,$action)){
-                if(isset($params[2])&&isset($params[3])&&isset($params[4])){
-                    $controller_object->$action($params[2],$params[3],$params[4]);
-                }elseif(isset($params[2])&&isset($params[3])){
-                    $controller_object->$action($params[2],$params[3]);
-                }
-                elseif(isset($params[2])){
-                    $controller_object->$action($params[2]);
-                }
-                else{
-                   $controller_object->$action(); 
+        $controller_name = 'C_' . ucfirst($controller);
+        $controller_object = new $controller_name();
+
+        if (method_exists($controller_object::class, $action)) {
+            if (isset($params[2]) && isset($params[3]) && isset($params[4])) {
+                $controller_object->$action($params[2], $params[3], $params[4]);
+            } elseif (isset($params[2]) && isset($params[3])) {
+                $controller_object->$action($params[2], $params[3]);
+            } elseif (isset($params[2])) {
+                $controller_object->$action($params[2]);
+            } else {
+                $controller_object->$action();
                 // $controller_object->default();
                 // var_dump($controller_object->$action);
-                }
             }
-            else{
-                $controller_object->default();
-            }
+        } else {
+            $controller_object->default();
         }
     }
-    else{
-        require('template/connexion.php');;
-    }
+} else {
+    require('template/connexion.php');;
+}
 
     // session_start();
     

@@ -82,6 +82,11 @@ class C_Batch
         require('template/batch.php');
     }
 
+    function batch_mt()
+    {
+        require('template/batch/batch_mt.php');
+    }
+
     function historique($type)
     {
         $batch_list = $this->getBatchList();
@@ -97,6 +102,9 @@ class C_Batch
         $batch_day = '';
         $datafacture1 = [];
         $datafacture2 = [];
+
+        $totalfacture1 = 0;
+        $totalfacture2 = 0;
 
         $day1 = date('Y-m-d', strtotime('monday this week'));;
         $day2 = date('Y-m-d');
@@ -482,7 +490,7 @@ class C_Batch
         $statement =
         "
             select /*+ parallel(8) */ 
-            count(be.num_rec) as NBRE_FACTURE, be.f_batch_date dates
+            nvl(count(be.num_rec),0) as NBRE_FACTURE, be.f_batch_date dates
             from business_struct b
             join bill_extraction_list be on b.cod_unicom = be.cod_unicom
             where be.f_batch_date >= TO_DATE(:day1, 'YYYY-MM-DD') and be.f_batch_date <= TO_DATE(:day2, 'YYYY-MM-DD')
