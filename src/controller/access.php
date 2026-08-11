@@ -87,7 +87,7 @@
                             $user->username = $entries[0]['cn'][0];
 
                             $_SESSION['user'] = $user;
-                            $this->getUserRole($user->cn);
+                            // $this->getUserRole($user->cn);
 
                             // $title = "Dashboard";
                             // $breadcumb = "Dashboard";

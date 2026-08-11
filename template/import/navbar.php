@@ -23,7 +23,7 @@
             </a>
         </li>
 
-        <li class="nav-item <?= ShowIfAuth($_SESSION['roles'],"ADMIN") ?>">
+        <li class="nav-item invisible">
             <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
                 <i class="fas fa-cog"></i>
             </a>
