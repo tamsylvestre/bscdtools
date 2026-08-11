@@ -12,7 +12,6 @@ require_once("src/lib/database.php");
 require_once("src/lib/utils.php");
 require_once("src/model/user.php");
 
-// session_set_cookie_params(180);
 session_start();
 
 if ($_GET['action']) {

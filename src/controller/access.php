@@ -14,14 +14,25 @@
 
         function default()
         {
-            $user = new User();
-            $user->cn = $_POST['userid'];
-            $user->username = $_POST['userid'];
-            $_SESSION['user'] = $user;
-            $_SESSION['roles'] = ["ADMIN"];
-            // require("template/dashboard.php");
+            // $user = new User();
+            // $user->cn = $_POST['userid'];
+            // $user->username = $_POST['userid'];
+            // $_SESSION['user'] = $user;
+            // $_SESSION['roles'] = ["ADMIN"];
+            // header("Location: dashboard");
 
-            header("Location: dashboard");
+            if(isset($_POST['userid'])&&isset($_POST['password']))
+            {
+                $userid = $_POST['userid'];
+                $password = $_POST['password'];
+
+                $tab = explode("@",$userid);
+                $userid = trim($tab[0]);
+
+                $this->CheckADUser($userid, $password);
+
+            }
+
         }
 
         function logout()
@@ -78,9 +89,10 @@
                             $_SESSION['user'] = $user;
                             $this->getUserRole($user->cn);
 
-                            $title = "Dashboard";
-                            $breadcumb = "Dashboard";
-                            require("template/dashboard.php");
+                            // $title = "Dashboard";
+                            // $breadcumb = "Dashboard";
+                            // require("template/dashboard.php");
+                            header("Location: dashboard");
                         }
 
                     }
