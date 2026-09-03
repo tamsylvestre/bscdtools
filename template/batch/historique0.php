@@ -296,12 +296,21 @@
                     }
                 },
 
-                dataLabels: {
-                    enabled: false
-                },
-
                 legend: {
                     position: "top"
+                },
+                
+                dataLabels: {
+                    enabled: true
+                },
+
+                markers: {
+                    size: 5
+                },
+
+                tooltip: {
+                    shared: true,
+                    intersect: false
                 }
 
             });

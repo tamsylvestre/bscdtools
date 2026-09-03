@@ -468,6 +468,16 @@
 
         });
 
+        $('#customerlist_range').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'YYYY-MM-DD',
+                separator: ' - ',
+                cancelLabel: 'Annuler',
+                applyLabel: 'Appliquer'
+            }
+        });
+
         //Date and time picker
         // $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
     </script>

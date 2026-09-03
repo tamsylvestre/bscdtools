@@ -14,24 +14,24 @@
 
         function default()
         {
-            // $user = new User();
-            // $user->cn = $_POST['userid'];
-            // $user->username = $_POST['userid'];
-            // $_SESSION['user'] = $user;
-            // $_SESSION['roles'] = ["ADMIN"];
-            // header("Location: dashboard");
+            $user = new User();
+            $user->cn = $_POST['userid'];
+            $user->username = $_POST['userid'];
+            $_SESSION['user'] = $user;
+            $_SESSION['roles'] = ["ADMIN"];
+            header("Location: dashboard");
 
-            if(isset($_POST['userid'])&&isset($_POST['password']))
-            {
-                $userid = $_POST['userid'];
-                $password = $_POST['password'];
+            // if(isset($_POST['userid'])&&isset($_POST['password']))
+            // {
+            //     $userid = $_POST['userid'];
+            //     $password = $_POST['password'];
 
-                $tab = explode("@",$userid);
-                $userid = trim($tab[0]);
+            //     $tab = explode("@",$userid);
+            //     $userid = trim($tab[0]);
 
-                $this->CheckADUser($userid, $password);
+            //     $this->CheckADUser($userid, $password);
 
-            }
+            // }
 
         }
 

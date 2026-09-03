@@ -157,7 +157,7 @@ class C_Batch
                     $day1week2 = $date->format('Y-m-d');
 
                     // Dernier jour (dimanche)
-                    $date->modify('+6 days');
+                    $date->modify('+7 days');
                     $day2week2 = $date->format('Y-m-d');
 
                     $data2 = $this->getFactureData($day1week2,$day2week2);
@@ -299,7 +299,7 @@ class C_Batch
                             where be.f_batch_date = date'$date'
                             group by b.nom_area
                             )
-                            select sum( NBRE_FACTURE ) c from tmp";
+                            select NVL(SUM(NBRE_FACTURE), 0) c from tmp";
         $repo = new CmsRepository(new DbConnect());
         $result = $repo->checkbatch($request);
 
@@ -488,20 +488,28 @@ class C_Batch
         $repo = new CmsRepository(new DbConnect());
 
         $statement =
-        "
-            select /*+ parallel(8) */ 
-            nvl(count(be.num_rec),0) as NBRE_FACTURE, be.f_batch_date dates
-            from business_struct b
-            join bill_extraction_list be on b.cod_unicom = be.cod_unicom
-            where be.f_batch_date >= TO_DATE(:day1, 'YYYY-MM-DD') and be.f_batch_date <= TO_DATE(:day2, 'YYYY-MM-DD')
-            group by be.f_batch_date
-            order by be.f_batch_date
+        "WITH dates AS (
+                SELECT TO_DATE(:day1, 'YYYY-MM-DD') + LEVEL - 1 AS dt
+                FROM DUAL
+                CONNECT BY LEVEL <= TO_DATE(:day2, 'YYYY-MM-DD') - TO_DATE(:day1, 'YYYY-MM-DD') + 1
+            )
+            SELECT /*+ parallel(8) */
+                d.dt AS dates,
+                COUNT(be.num_rec) AS NBRE_FACTURE
+            FROM dates d
+            LEFT JOIN bill_extraction_list be
+            ON TRUNC(be.f_batch_date) = d.dt
+            LEFT JOIN business_struct b
+            ON b.cod_unicom = be.cod_unicom
+            GROUP BY d.dt
+            ORDER BY d.dt
         ";
         $params = [
             "day1" => $day1,
             "day2" => $day2,
         ];
         $rows = $repo->getAllWithParams($statement, $params);
+        // var_dump($rows);
         $output = [];
         $dates = [];
         $nbre = [];

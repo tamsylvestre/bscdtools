@@ -159,6 +159,111 @@
             require("template/aci_encaisses.php");
         }
 
+        function customer_list()
+        {
+            $files = [];
+            $output = "";   
+            
+            $regions = $this->repo->getBusinessStructElement("REGION");
+            $divisions = $this->repo->getBusinessStructElement("DIVISION");
+            $agences = $this->repo->getBusinessStructElement("AGENCE");
+            $statuts = $this->repo->getBusinessStructElement("STATUS");
+
+            // var_dump($regions);
+            
+            if(isset($_REQUEST['region']))
+            {
+                $region = ($_REQUEST['region'] == 'all') ? "" : $_REQUEST['region'];
+                $division = ($_REQUEST['division'] == 'all') ? "" : $_REQUEST['division'];
+                $agence = ($_REQUEST['agence'] == 'all') ? "" : $_REQUEST['agence'];
+                $statut = ($_REQUEST['status'] == 'all') ? "" : $_REQUEST['status'];
+                
+                $statement = "
+                        SELECT
+                            REGION,
+                            DIVISION,
+                            AGENCE,
+                            COD_UNICOM,
+                            COD_CLI,
+                            CONTRACT,
+                            STATUS,
+                            METER_NO,
+                            CUST_NAME,
+                            PHONE_NUMBERS,
+                            E_MAIL,
+                            REF_GEO,
+                            DATE_AB,
+                            DATE_RESILIATION,
+                            VOLTAGE,
+                            SEGMENT_TRESOR,
+                            METER,
+                            NIU_RIGHT,
+                            NUI_QC,
+                            LAST_VC_DATE,
+                            SEGMENT_RFM_2,
+                            POSTPAID_PROFILE_DATE,
+                            SEGMENTATION
+                        FROM CMS_RFC.TB_CUSTOMERS_LIST
+                        WHERE
+                        REGION LIKE '%$region%' AND
+                        DIVISION LIKE '%$division%' AND 
+                        AGENCE LIKE '%$agence%' AND
+                        STATUS LIKE '%$statut%'
+                    ";
+
+                if(!empty($_REQUEST['abonnement'])){
+                    $tab = empty($_REQUEST['abonnement']) ? ['',''] : explode('|',$_REQUEST['abonnement']);
+                    $day1 = $tab[0];
+                    $day2 = $tab[1];
+
+                    $statement = "
+                        SELECT
+                            REGION,
+                            DIVISION,
+                            AGENCE,
+                            COD_UNICOM,
+                            COD_CLI,
+                            CONTRACT,
+                            STATUS,
+                            METER_NO,
+                            CUST_NAME,
+                            PHONE_NUMBERS,
+                            E_MAIL,
+                            REF_GEO,
+                            DATE_AB,
+                            DATE_RESILIATION,
+                            VOLTAGE,
+                            SEGMENT_TRESOR,
+                            METER,
+                            NIU_RIGHT,
+                            NUI_QC,
+                            LAST_VC_DATE,
+                            SEGMENT_RFM_2,
+                            POSTPAID_PROFILE_DATE,
+                            SEGMENTATION
+                        FROM CMS_RFC.TB_CUSTOMERS_LIST
+                        WHERE
+                        REGION LIKE '%$region%' AND
+                        DIVISION LIKE '%$division%' AND
+                        AGENCE LIKE '%$agence%' AND
+                        STATUS LIKE '%$statut%' AND
+                        DATE_AB >= TO_DATE($day1, 'YYYY-MM-DD') AND
+                        DATE_AB <= TO_DATE($day2, 'YYYY-MM-DD')";
+                }
+
+                var_dump($statement);
+
+                $output = $this->repo->getCustomerList($statement);
+
+                $folder = "./template/exports/customer_list/*";
+
+                // Récupère tous les fichiers correspondant au pattern
+                $files = glob($folder);
+            }
+
+            require("template/customer_list.php");
+        }
+
         private function getUsers():array
         {
             $statement = 

@@ -120,6 +120,59 @@ class CmsRepository
         return "Extraction terminé : $rowCount lignes réparties dans " . ($fileCount - 1) . " fichiers.";
     }
 
+    public function getCustomerList($statement)
+    {
+        $conn = $this->dbconnect->getCMSDb();
+        $stid = oci_parse($conn, $statement);
+        oci_execute($stid);
+
+        $maxRowsPerFile = 500000;
+        $fileCount = 1;
+        $rowCount = 0;
+        $handle = null;
+
+        $folder = "./template/exports/customer_list/*";
+
+        // Récupère tous les fichiers correspondant au pattern
+        $files = glob($folder);
+
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file); // Supprime le fichier
+            }
+        }
+
+        while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) !== false) {
+
+            // Si on atteint la limite ou si c'est le premier passage, on change de fichier
+            if ($rowCount % $maxRowsPerFile === 0) {
+                if ($handle) {
+                    fclose($handle);
+                }
+                $fileName = "./template/exports/customer_list/CustomerList_Part_" . $fileCount . ".csv";
+                $handle = fopen($fileName, 'w');
+
+                // Optionnel : Ajouter les entêtes de colonnes
+                fputcsv($handle, array_keys($row), ';');
+
+                $fileCount++;
+            }
+
+            // Écriture de la ligne dans le CSV
+            fputcsv($handle, $row, ';');
+            $rowCount++;
+        }
+
+        // Nettoyage
+        if ($handle) {
+            fclose($handle);
+        }
+        oci_free_statement($stid);
+        oci_close($conn);
+
+        return "Extraction terminé : $rowCount lignes réparties dans " . ($fileCount - 1) . " fichiers.";
+    }
+
     public function getAll($statement)
     {
         $conn = $this->dbconnect->getCMSDb();
@@ -166,6 +219,13 @@ class CmsRepository
         oci_free_statement($stmt);
 
         return $rows;
+    }
+
+    public function getBusinessStructElement($element)
+    {
+        $statement = "SELECT DISTINCT $element FROM CMS_RFC.TB_CUSTOMERS_LIST ORDER BY 1";
+
+        return $this->getAll($statement);
     }
     
 }
