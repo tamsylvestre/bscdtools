@@ -40,7 +40,7 @@
 
                             <div class="form-group col-2 pointer">
                                 <label for="exampleSelectBorder"><code>Région</code></label>
-                                <select class="custom-select form-control-border" name="region" id="exampleSelectBorder">
+                                <select class="custom-select form-control-border" name="region" id="exampleSelectBorder" value="<?= $region ?>">
                                     <option value="all"> ALL </option>
                                      <?php 
                                     foreach ($regions as $item ) {
@@ -52,7 +52,7 @@
 
                             <div class="form-group col-2 pointer">
                                 <label for="exampleSelectBorder"><code>Division</code></label>
-                                <select class="custom-select form-control-border" name="division" id="exampleSelectBorder">
+                                <select class="custom-select form-control-border" name="division" id="exampleSelectBorder" value="<?= $division ?>">
                                     <option value="all"> ALL </option>
                                      <?php 
                                     foreach ($divisions as $item ) {
@@ -64,7 +64,7 @@
 
                             <div class="form-group col-2 pointer">
                                 <label for="exampleSelectBorder"><code>Agence</code></label>
-                                <select class="custom-select form-control-border" name="agence" id="exampleSelectBorder">
+                                <select class="custom-select form-control-border" name="agence" id="exampleSelectBorder" value="<?= $agence ?>">
                                     <option value="all"> ALL </option>
                                      <?php 
                                     foreach ($agences as $item ) {
@@ -76,7 +76,7 @@
 
                             <div class="form-group col-2 pointer">
                                 <label for="exampleSelectBorder"><code>Statut</code></label>
-                                <select class="custom-select form-control-border" name="status" id="exampleSelectBorder">
+                                <select class="custom-select form-control-border" name="status" id="exampleSelectBorder" value="<?= $statut ?>">
                                     <option value="all"> ALL </option>
                                     <?php 
                                     foreach ($statuts as $item ) {

@@ -169,7 +169,10 @@
             $agences = $this->repo->getBusinessStructElement("AGENCE");
             $statuts = $this->repo->getBusinessStructElement("STATUS");
 
-            // var_dump($regions);
+            $region = "all";
+            $division = "all";
+            $agence = "all";
+            $statut = "all";
             
             if(isset($_REQUEST['region']))
             {
@@ -251,7 +254,7 @@
                         DATE_AB <= TO_DATE($day2, 'YYYY-MM-DD')";
                 }
 
-                var_dump($statement);
+                // var_dump($statement);
 
                 $output = $this->repo->getCustomerList($statement);
 
