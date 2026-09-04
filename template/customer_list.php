@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0"> CUSTOMER LIST </h1>
+                    <h1 class="m-0"> MARKETING (MI) </h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb -float-sm-right">
@@ -34,7 +34,7 @@
                                             <i class="far fa-calendar-alt"></i>
                                         </span>
                                     </div>
-                                    <input type="text" class="form-control float-right" id="customerlist_range" value="" name="abonnement">
+                                    <input type="text" class="form-control" id="customerlist_range" name="abonnement">
                                 </div>
                             </div>
 

@@ -250,8 +250,8 @@
                         DIVISION LIKE '%$division%' AND
                         AGENCE LIKE '%$agence%' AND
                         STATUS LIKE '%$statut%' AND
-                        DATE_AB >= TO_DATE($day1, 'YYYY-MM-DD') AND
-                        DATE_AB <= TO_DATE($day2, 'YYYY-MM-DD')";
+                        DATE_AB >= TO_DATE('$day1', 'YYYY-MM-DD') AND
+                        DATE_AB <= TO_DATE('$day2', 'YYYY-MM-DD')";
                 }
 
                 // var_dump($statement);

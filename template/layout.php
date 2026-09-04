@@ -451,7 +451,6 @@
 
         //Date range picker
         $('#reservation').daterangepicker({
-
             locale: {
                 format: 'YYYY-MM-DD',
                 separator: ' | '
@@ -460,7 +459,7 @@
         });
 
         $('.reservation').daterangepicker({
-
+            autoUpdateInput: false,
             locale: {
                 format: 'YYYY-MM-DD',
                 separator: ' | '
@@ -472,10 +471,24 @@
             autoUpdateInput: false,
             locale: {
                 format: 'YYYY-MM-DD',
-                separator: ' - ',
+                separator: ' | ',
                 cancelLabel: 'Annuler',
                 applyLabel: 'Appliquer'
             }
+        });
+
+        $('#customerlist_range').on('apply.daterangepicker', function(ev, picker) {
+
+            $(this).val(
+                picker.startDate.format('YYYY-MM-DD') +
+                ' | ' +
+                picker.endDate.format('YYYY-MM-DD')
+            );
+
+        });
+
+        $('#customerlist_range').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
         });
 
         //Date and time picker
