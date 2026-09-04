@@ -173,6 +173,7 @@
             $division = "all";
             $agence = "all";
             $statut = "all";
+            $abonnement = "";
             
             if(isset($_REQUEST['region']))
             {
@@ -218,6 +219,7 @@
                     $tab = empty($_REQUEST['abonnement']) ? ['',''] : explode('|',$_REQUEST['abonnement']);
                     $day1 = $tab[0];
                     $day2 = $tab[1];
+                    $abonnement = $_REQUEST['abonnement'];
 
                     $statement = "
                         SELECT

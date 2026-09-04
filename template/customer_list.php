@@ -34,42 +34,42 @@
                                             <i class="far fa-calendar-alt"></i>
                                         </span>
                                     </div>
-                                    <input type="text" class="form-control" id="customerlist_range" name="abonnement">
+                                    <input type="text" class="form-control" value="<?= $abonnement ?>" id="customerlist_range" name="abonnement">
                                 </div>
                             </div>
 
                             <div class="form-group col-2 pointer">
                                 <label for="exampleSelectBorder"><code>Région</code></label>
-                                <select class="custom-select form-control-border" name="region" id="exampleSelectBorder" value="<?= $region ?>">
+                                <select class="custom-select form-control-border" name="region" id="exampleSelectBorder">
                                     <option value="all"> ALL </option>
                                      <?php 
                                     foreach ($regions as $item ) {
                                     ?>
-                                     <option value="<?= $item["REGION"] ?>"> <?= $item["REGION"] ?> </option>
+                                     <option value="<?= $item["REGION"] ?>" <?= ($region == $item["REGION"]) ? 'selected' : '' ?>> <?= $item["REGION"] ?> </option>
                                     <?php } ?>
                                 </select>
                             </div>
 
                             <div class="form-group col-2 pointer">
                                 <label for="exampleSelectBorder"><code>Division</code></label>
-                                <select class="custom-select form-control-border" name="division" id="exampleSelectBorder" value="<?= $division ?>">
+                                <select class="custom-select form-control-border" name="division" id="exampleSelectBorder">
                                     <option value="all"> ALL </option>
                                      <?php 
                                     foreach ($divisions as $item ) {
                                     ?>
-                                     <option value="<?= $item["DIVISION"] ?>"> <?= $item["DIVISION"] ?> </option>
+                                     <option value="<?= $item["DIVISION"] ?>" <?= ($division == $item["DIVISION"]) ? 'selected' : '' ?>> <?= $item["DIVISION"] ?> </option>
                                     <?php } ?>
                                 </select>
                             </div>
 
                             <div class="form-group col-2 pointer">
                                 <label for="exampleSelectBorder"><code>Agence</code></label>
-                                <select class="custom-select form-control-border" name="agence" id="exampleSelectBorder" value="<?= $agence ?>">
+                                <select class="custom-select form-control-border" name="agence" id="exampleSelectBorder">
                                     <option value="all"> ALL </option>
                                      <?php 
                                     foreach ($agences as $item ) {
                                     ?>
-                                     <option value="<?= $item["AGENCE"] ?>"> <?= $item["AGENCE"] ?> </option>
+                                     <option value="<?= $item["AGENCE"] ?>" <?= ($agence == $item["AGENCE"]) ? 'selected' : '' ?>> <?= $item["AGENCE"] ?> </option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -81,7 +81,7 @@
                                     <?php 
                                     foreach ($statuts as $item ) {
                                     ?>
-                                     <option value="<?= $item["STATUS"] ?>"> <?= $item["STATUS"] ?> </option>
+                                     <option value="<?= $item["STATUS"] ?>" <?= ($statut == $item["STATUS"]) ? 'selected' : '' ?>> <?= $item["STATUS"] ?> </option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -122,7 +122,7 @@
                                     <td> <i class="fas fa-file fa-2x"></i> </td>
                                     <td class="lead text-center"> <?= $tab[sizeof($tab)-1] ?> </td>
                                     <td>  
-                                        <a href="<?= BASE_URL."/template/exports/annulations/".$tab[sizeof($tab)-1] ?>"
+                                        <a href="<?= BASE_URL."/template/exports/customer_list/".$tab[sizeof($tab)-1] ?>"
                                             target="_blank" rel="noopener noreferrer" class="btn btn-outline-info"> 
                                             <i class="fas fa-download"></i> 
                                         </a> 
