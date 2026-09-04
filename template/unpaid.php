@@ -28,7 +28,7 @@
                             <tr>
                                 <th>Nom</th>
                                 <th>Taille</th>
-                                <th>Date</th>
+                                <th>Dernière Modification</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -98,10 +98,10 @@
 
                                     <td>
 
-                                        <a
-                                            class="download"
-                                            href="download.php?file=<?= urlencode($file) ?>">
-                                            Télécharger
+                                        <a class="btn btn-sm btn-info btn-flat" 
+                                            href="<?= BASE_URL ?>/unpaid/download/<?= $DIVISION."/".str_replace('.','__',urlencode($file)) ?>"
+                                            target="_blank">
+                                            Télécharger <i class="fas fa-download"></i>
                                         </a>
 
                                     </td>

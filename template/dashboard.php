@@ -145,8 +145,9 @@
                     <div class="card-body">
                         <ol>
                             <li><a href="<?= BASE_URL ?>/batch" target="_blank"> BATCH BT </a></li>
-                            <li><a href="<?= BASE_URL ?>/batch/historique/0" target="_blank"> Historique BATCH BT </a></li>
-                            <li><a href="<?= BASE_URL ?>/batch/batch_mt" target="_blank"> BATCH GBT & MT </a></li>                          
+                            <li><a href="<?= BASE_URL ?>/batch/historique/0" target="_blank"> Historique BATCH </a></li>
+                            <li><a href="<?= BASE_URL ?>/batch/batch_mt" target="_blank"> Copie MMS >>> CMS </a></li>
+                            <li><a href="<?= BASE_URL ?>/batch/batch_mt" target="_blank"> Facturation MT & GBT </a></li>                          
                         </ol>
                     </div>
                     <!-- /.card-body -->
@@ -239,7 +240,15 @@
                     </div>
                     <div class="card-body">
                         <ol>
-                            <li><a href="<?= BASE_URL ?>/unpaid" target="_blank"> DCUD </a></li>
+                            <li><a href="<?= BASE_URL ?>/unpaid/files/DCUD" target="_blank"> DCUD </a></li>
+                            <li><a href="<?= BASE_URL ?>/unpaid/files/DCUY" target="_blank"> DCUY </a></li>
+                            <li><a href="<?= BASE_URL ?>/unpaid/files/DRC" target="_blank"> DRC </a></li>
+                            <li><a href="<?= BASE_URL ?>/unpaid/files/DRE" target="_blank"> DRE </a></li>
+                            <li><a href="<?= BASE_URL ?>/unpaid/files/DRNEA" target="_blank"> DRNEA </a></li>
+                            <li><a href="<?= BASE_URL ?>/unpaid/files/DRONO" target="_blank"> DRONO </a></li>
+                            <li><a href="<?= BASE_URL ?>/unpaid/files/DRSANO" target="_blank"> DRSANO </a></li>
+                            <li><a href="<?= BASE_URL ?>/unpaid/files/DRSM" target="_blank"> DRSM </a></li>
+                            <li><a href="<?= BASE_URL ?>/unpaid/files/DRSOM" target="_blank"> DRSOM </a></li>
                             
                         </ol>
                     </div>
