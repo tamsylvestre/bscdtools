@@ -87,6 +87,11 @@ class C_Batch
         require('template/batch/batch_mt.php');
     }
 
+    function copy_mms()
+    {
+        require('template/batch/copy_mms.php');
+    }
+
     function historique($type)
     {
         $batch_list = $this->getBatchList();

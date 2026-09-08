@@ -146,7 +146,7 @@
                         <ol>
                             <li><a href="<?= BASE_URL ?>/batch" target="_blank"> BATCH BT </a></li>
                             <li><a href="<?= BASE_URL ?>/batch/historique/0" target="_blank"> Historique BATCH </a></li>
-                            <li><a href="<?= BASE_URL ?>/batch/batch_mt" target="_blank"> Copie MMS >>> CMS </a></li>
+                            <li><a href="<?= BASE_URL ?>/batch/copy_mms" target="_blank"> Copie MMS >>> CMS </a></li>
                             <li><a href="<?= BASE_URL ?>/batch/batch_mt" target="_blank"> Facturation MT & GBT </a></li>                          
                         </ol>
                     </div>

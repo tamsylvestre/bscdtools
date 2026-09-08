@@ -23,10 +23,6 @@
 
             <div class="row">
 
-            </div>
-            
-            <div class="row">
-
                 <div class="col-3">
 
                     <div class="card card-primary card-outline">
@@ -78,7 +74,7 @@
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:1px;">
                                                 <div class="float-left">
-                                                    <input type="number" class="form-control" id="inp_fechab" value="<?= date('m')-1 ?>">
+                                                    <input type="number" class="form-control" id="inp_fechab" value="<?= date('m') - 1 ?>">
                                                 </div>
 
                                                 <div class="float-right" style="margin-left:auto;">
@@ -124,7 +120,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for=""> <code>end</code></label>
-                                                <input type="date" class="form-control" name="annee" value="<?=  date('Y-m-d', strtotime('+1 day')) ?>">
+                                                <input type="date" class="form-control" name="annee" value="<?= date('Y-m-d', strtotime('+1 day')) ?>">
                                             </div>
                                             <div class="form-group">
                                                 <label for=""> <code>last try</code></label>
@@ -193,6 +189,35 @@
 
                 <div class="col-6">
 
+
+                    <div class="card">
+                    
+                        <table class='table text-md'>
+                            <thead>
+                                <tr>
+                                    <th>CYLCLE ACTUEL</th>
+                                    <th>DATE COPIE(FECHAB)</th>
+                                    <th>CONFIGURATION COPIE(config.ini)</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>8</td>
+                                    <td> 20260807 </td>
+                                    <td>
+                                        fromDate=2026-08-25 <br>
+                                        toDate=2026-09-03 <br>
+                                        lastTryMv=1 <br>
+                                        lastTryLv=1 <br>
+                                        threads=4 <br>
+                                        closePending=0 <br>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                     <div class="terminal">
                         <div class="terminal-bar">
                             <div class="dots">
@@ -215,22 +240,75 @@
                         </div>
                     </div>
 
-                    <div class="card mt-1 invisible" style="height: 85vh;y-overflow:scroll;">
-                        <div class="card-header p-2">
-                            <h3 class="card-title">
-                                <span class="fas fa-circle text-danger"></span>
-                                <span class="fas fa-circle text-warning"></span>
-                                <span class="fas fa-circle text-success"></span>
-                                RETOUR SERVEUR
-                            </h3>
+                    <div class="card mt-3" style=" overflow-x : scroll">
+
+                        <div class="card-header">
+                            <h3 class="card-title">RAPPORT</h3>
                             <div class="card-tools">
-                                <!-- <span class="fas fa-circle text-primary" id="status-dot"></span> -->
-                                <span class="mr-1" id="status-text">votre serveur.com</span>
+                                <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="card-body p-0">
-                            <textarea name="" id="output" class="w-100 h-100 bg-dark text-white" rows="20" disabled></textarea>
-                        </div>
+
+                        <table class='table table-striped text-xs'>
+                            <thead>
+                                <tr>
+                                    <th> N° Migration </th>
+                                    <th> Client </th>
+                                    <th>Compt. avant Migration </th>
+                                    <th>Compt. Lu </th>
+                                    <th>Compt. après migration </th>
+                                    <th>Itin. avant Migration </th>
+                                    <th>Itin. Fermé auto. </th>
+                                    <th>Itin. Fermé manu. </th>
+                                    <th>Total Itin. Fermé </th>
+                                    <th>Itin. en attente </th>
+                                    <th>Taux d'avancement </th>
+                                    <th>Taux évolution </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <?php $i=1; while($i<=4) {  ?>
+                                <tr>
+                                    <td> <?= $i ?> </td>
+                                    <td> MT </td>
+                                    <td> 2601 </td>
+                                    <td> 2082 </td>
+                                    <td> 519 </td>
+                                    <td> 2607 </td>
+                                    <td> 2076 </td>
+                                    <td> 0 </td>
+                                    <td> 2076 </td>
+                                    <td> 531 </td>
+                                    <td> 80% </td>
+                                    <td> 90% </td>
+                                </tr>
+                                <tr>
+                                    <td> <?= $i ?> </td>
+                                    <td> GBT </td>
+                                    <td> 43039 </td>
+                                    <td> 37304 </td>
+                                    <td> 5735 </td>
+                                    <td> 1509 </td>
+                                    <td> 115 </td>
+                                    <td> 327 </td>
+                                    <td> 442 </td>
+                                    <td> 1067 </td>
+                                    <td> 87% </td>
+                                    <td> 89% </td>
+                                </tr>
+                                <?php $i++; } ?>
+                                
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -238,7 +316,7 @@
 
                     <div class="card card-secondary">
                         <div class="card-header">
-                            <h3 class="card-title">BATCH MT</h3>
+                            <h3 class="card-title">COPIE MT</h3>
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="maximize">
                                     <i class="fas fa-expand"></i>
@@ -303,29 +381,6 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">LECC510</a> </h3>
-
-                                        <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">Start</a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
-                                            <a class="btn btn-info  btn-sm ml-auto" onclick="check('lecc510')"> <i class='fas fa-eye'></i> </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <i class="fas fa-cogs bg-secondary"></i>
-                                    <div class="timeline-item">
                                         <h3 class="timeline-header"> <a href="#">Block Ano. MT</a> </h3>
 
                                         <div class="timeline-body">
@@ -345,50 +400,7 @@
                                     </div>
                                 </div>
 
-                                <div>
-                                    <i class="fas fa-cogs bg-secondary"></i>
-                                    <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">calcsmo-OS_Anomalia</a> </h3>
-
-                                        <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">Start</a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <i class="fas fa-cogs bg-secondary"></i>
-                                    <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Rapport MT</a> </h3>
-
-                                        <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">Start</a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                
                                 <div>
                                     <i class="fas fa-circle bg-dark"></i>
                                 </div>
@@ -399,7 +411,7 @@
 
                     <div class="card card-dark">
                         <div class="card-header">
-                            <h3 class="card-title">BATCH GBT</h3>
+                            <h3 class="card-title">COPIE GBT</h3>
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="maximize">
                                     <i class="fas fa-expand"></i>
@@ -484,52 +496,6 @@
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
                                         <h3 class="timeline-header"> <a href="#">Close Manual Itin. GBT</a> </h3>
-
-                                        <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">Start</a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <i class="fas fa-cogs bg-secondary"></i>
-                                    <div class="timeline-item">
-                                        <span class="time"><i class="fas fa-clock text-success" id="lecc300-enddate">--:--</i> </span>
-                                        <span class="time"><i class="fas fa-clock text-dark" id="lecc300-startdate">--:--</i> </span>
-                                        <h3 class="timeline-header"> <a href="#">CALCSMO-OS_ANOMALIA</a> </h3>
-
-                                        <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">Start</a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <i class="fas fa-cogs bg-secondary"></i>
-                                    <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Rapport GBT</a> </h3>
 
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:16px;">
