@@ -98,9 +98,9 @@
 
                                     <td>
 
-                                        <a class="btn btn-sm btn-info btn-flat" 
-                                            href="<?= BASE_URL ?>/unpaid/download/<?= $DIVISION."/".str_replace('.','__',urlencode($file)) ?>"
-                                            target="_blank">
+                                        <a class="btn btn-sm btn-info btn-flat btn-download"
+                                            f="<?= BASE_URL ?>/unpaid/download/<?= $DIVISION . "/" . str_replace('.', '__', urlencode($file)) ?>"
+                                            data-filename="<?= htmlspecialchars($file) ?>">
                                             Télécharger <i class="fas fa-download"></i>
                                         </a>
 
@@ -120,6 +120,58 @@
 
 </div>
 
+<script>
+    document.addEventListener('click', async function(e) {
+
+        const button = e.target.closest('.btn-download');
+
+        if (!button) {
+            return;
+        }
+
+        const url = button.dataset.url;
+        const filename = button.dataset.filename;
+
+        try {
+
+            button.disabled = true;
+
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error('Erreur HTTP : ' + response.status);
+            }
+
+            const blob = await response.blob();
+
+            const downloadUrl = window.URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+
+            a.href = downloadUrl;
+            a.download = filename;
+
+            document.body.appendChild(a);
+
+            a.click();
+
+            a.remove();
+
+            window.URL.revokeObjectURL(downloadUrl);
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert('Impossible de télécharger le fichier.');
+
+        } finally {
+
+            button.disabled = false;
+        }
+
+    });
+</script>
 
 <?php $content = ob_get_clean(); ?>
 

@@ -25,31 +25,13 @@ class C_Unpaid
         $os = PHP_OS_FAMILY;
 
         if ($os === 'Windows') {
-
-            // ==========================================
-            // DEVELOPPEMENT WINDOWS 11
-            // ==========================================
-
-            $sharedDirectory = $this->reposytories[$DIVISION]; //'\\\\10.250.90.33\\shared folders\\CMS_reports\\COLLECTIONS\\SHARED\\UNPAID\\CURRENT_YEAR\\DCUD';
-        } else {
-
-            // ==========================================
-            // PRODUCTION LINUX
-            // ==========================================
-
-            /*
-            * Le partage Windows est monté par exemple sur :
-            *
-            * /mnt/shared_files
-            *
-            * On accède ensuite au sous-répertoire :
-            *
-            * /mnt/shared_files/UNPAID/CURRENT_YEAR/DRONO
-            */
-
-            $sharedDirectory =
-                '/mnt/shared_files/UNPAID/CURRENT_YEAR/DRONO';
+            $directory = "\\\\10.250.90.33\\shared folders\\CMS_reports\\COLLECTIONS\\SHARED\\UNPAID\\CURRENT_YEAR\\";
         }
+        else{
+            $directory = '/mnt/cms_unpaid/CMS_reports/COLLECTIONS/SHARED/UNPAID/CURRENT_YEAR/';
+        }
+
+        $sharedDirectory = $directory.$DIVISION;
 
 
         // ==========================================
@@ -85,11 +67,13 @@ class C_Unpaid
         $os = PHP_OS_FAMILY;
 
         if ($os === 'Windows') {
-            $directory = $this->reposytories[$DIVISION];
+            $directory = "\\\\10.250.90.33\\shared folders\\CMS_reports\\COLLECTIONS\\SHARED\\UNPAID\\CURRENT_YEAR\\";
         }
         else{
-            $directory = '/mnt/windows_share';
+            $directory = '/mnt/cms_unpaid/CMS_reports/COLLECTIONS/SHARED/UNPAID/CURRENT_YEAR/';
         }
+
+        $directory = $directory.$DIVISION;
 
         // if (!isset($_GET['file'])) {
         //     die('Fichier non spécifié.');
@@ -107,18 +91,17 @@ class C_Unpaid
             die('Fichier introuvable.');
         }
 
+        // Nettoyer les éventuels headers précédents
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
         // Téléchargement
         header('Content-Type: application/octet-stream');
-
-        header(
-            'Content-Disposition: attachment; filename="' .
-            basename($file) .
-            '"'
-        );
-
+        header('Content-Disposition: attachment; filename="' . $file . '"');
         header('Content-Length: ' . filesize($filePath));
-
         header('Cache-Control: no-cache');
+        header('Pragma: no-cache');
 
         readfile($filePath);
 
