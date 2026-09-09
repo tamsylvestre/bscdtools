@@ -22,6 +22,7 @@ class C_Batch
         'facc000'  => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-only-facc0001-log.sh",
         'os_anomalia'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-only-os_anomalias.sh',
         'campania'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-only-campania.sh',
+        'reading_report'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-only-reading-report.sh',
         'cb_split'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-cb_split-log.sh',
         'cb_conv'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-cb_conv-log.sh',
         'cb_stprod'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-cb-stprod-log.sh',
@@ -45,6 +46,7 @@ class C_Batch
         'facc000'  => "FACC0001",
         'os_anomalia'  => 'os_anomalias',
         'campania'  => 'campania',
+        'reading_report'  => 'reading_report_gen',
         'cb_split'  => 'cb_split',
         'cb_conv'  => 'cb_conv',
         'cb_stprod'  => 'cb_stProd',
@@ -89,6 +91,15 @@ class C_Batch
 
     function copy_mms()
     {
+        // $sftp = new SFTP('10.241.110.33', 22, 60);
+
+        // if (!$sftp->login('sylvestre.tam', 'Monique2026$')) {
+        //     exit('Connexion échouée');
+        // }
+
+        // $config_ini = $sftp->get('/opt/app/war/configs/config.ini');
+        $config_ini = "";
+
         require('template/batch/copy_mms.php');
     }
 
@@ -108,8 +119,10 @@ class C_Batch
         $datafacture1 = [];
         $datafacture2 = [];
 
-        $totalfacture1 = 0;
-        $totalfacture2 = 0;
+        $facture_periode1 = "";
+        $facture_periode2 = "";
+        $facture_periode1_nbr = 0;
+        $facture_periode2_nbr = 0;
 
         $day1 = date('Y-m-d', strtotime('monday this week'));;
         $day2 = date('Y-m-d');
@@ -134,41 +147,52 @@ class C_Batch
             case 'facture':
                 $facture_graph = '';
 
-                $week1 = $_POST['week1']; 
-                list($year, $weekNumber) = explode('-W', $week1);
-                $date = new DateTime();
-                $date->setISODate($year, $weekNumber);
+                // $week1 = $_POST['week1']; 
+                // list($year, $weekNumber) = explode('-W', $week1);
+                // $date = new DateTime();
+                // $date->setISODate($year, $weekNumber);
 
-                // Premier jour (lundi)
-                $day1week1 = $date->format('Y-m-d');
+                // // Premier jour (lundi)
+                // $day1week1 = $date->format('Y-m-d');
 
-                // Dernier jour (dimanche)
-                $date->modify('+6 days');
-                $day2week1 = $date->format('Y-m-d');
+                // // Dernier jour (dimanche)
+                // $date->modify('+6 days');
+                // $day2week1 = $date->format('Y-m-d');
+ 
+                $days = explode('|',$_REQUEST['periode1']);
+                $facture_periode1 = $days[0].' à '.$days[1];
 
-                $data1 = $this->getFactureData($day1week1,$day2week1);
+                $data1 = $this->getFactureData($days[0],$days[1]);
 
                 $labels1 = $data1[0];
                 $datafacture1 = $data1[1];
 
-                if( isset($_POST['week2']) && !empty($_POST['week2']) )
+                $facture_periode1_nbr = array_sum($datafacture1);
+
+                if( isset($_POST['periode2']) && !empty($_POST['periode2']) )
                 {
-                    $week2 = $_POST['week2']; 
-                    list($year, $weekNumber) = explode('-W', $week2);
-                    $date = new DateTime();
-                    $date->setISODate($year, $weekNumber);
+                    // $week2 = $_POST['week2']; 
+                    // list($year, $weekNumber) = explode('-W', $week2);
+                    // $date = new DateTime();
+                    // $date->setISODate($year, $weekNumber);
 
-                    // Premier jour (lundi)
-                    $day1week2 = $date->format('Y-m-d');
+                    // // Premier jour (lundi)
+                    // $day1week2 = $date->format('Y-m-d');
 
-                    // Dernier jour (dimanche)
-                    $date->modify('+7 days');
-                    $day2week2 = $date->format('Y-m-d');
+                    // // Dernier jour (dimanche)
+                    // $date->modify('+7 days');
+                    // $day2week2 = $date->format('Y-m-d');
 
-                    $data2 = $this->getFactureData($day1week2,$day2week2);
+                    $days = explode('|',$_REQUEST['periode2']);
+                    $facture_periode2 = $days[0].' à '.$days[1];
+
+                    $data2 = $this->getFactureData($days[0],$days[1]);
                     $labels2 = $data2[0];
                     $datafacture2 = $data2[1];
+
+                    $facture_periode2_nbr = array_sum($datafacture2);
                 }
+                
                 break;
             default:
                 # code...

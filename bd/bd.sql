@@ -79,3 +79,35 @@ INSERT INTO batch_list VALUES (
 'cb_stext',
 'SELECT COUNT(*) c FROM imagenes_dispatch WHERE f_actual>SYSDATE-30 AND est_imagen=''PS002'''
 );
+
+
+
+DROP IF EXIST copy_mms_config
+CREATE TABLE copy_mms_config (
+    cycle   INTEGER,
+    migration    INTEGER
+);
+
+DROP IF EXIST copy_mms_report
+CREATE TABLE copy_mms_report (
+    cycle   INTEGER,
+    migration    INTEGER,
+    client  VARCHAR2(4),
+    compteur_avant_migration INTEGER,
+    compteur_apres_migration INTEGER,
+    itineraire_avant_migration INTEGER,
+    itineraire_apres_migration INTEGER,
+
+    PRIMARY KEY(cycle,client,migration)
+);
+
+DROP IF EXIST copy_mms_fermeture_manuel
+CREATE TABLE copy_mms_fermeture_manuel (
+    cycle   INTEGER,
+    migration    INTEGER,
+    client  VARCHAR2(4),
+    compteur_avant_migration INTEGER,
+    compteur_apres_migration INTEGER,
+
+    PRIMARY KEY(cycle,client,migration)
+);

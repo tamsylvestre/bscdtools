@@ -459,7 +459,6 @@
         });
 
         $('.reservation').daterangepicker({
-            autoUpdateInput: false,
             locale: {
                 format: 'YYYY-MM-DD',
                 separator: ' | '

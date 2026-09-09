@@ -253,7 +253,7 @@
                                     <div class="timeline-item">
                                         <span class="time"><i class="fas fa-clock text-dark" id="cms_mra_scp-enddate"></i> --:-- </span>
                                         <span class="time"><i class="fas fa-clock text-success" id="cms_mra_scp-startdate"></i> --:-- </span>
-                                        <h3 class="timeline-header"> <a href="#">CMS_MRA_SCP</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">MRA_CMS_SCP</a> </h3>
 
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:16px;">
@@ -572,6 +572,27 @@
                                         <div class="timeline-footer">
                                             <a class="btn btn-primary btn-sm" onclick="startExecution(162,'campania','')">Start</a>
                                             <a class="btn btn-danger btn-sm ml-auto" onclick="kill(162,'campania')">Kill</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <i class="fas fa-cogs bg-secondary"></i>
+                                    <div class="timeline-item">
+                                        <span class="time"><i class="fas fa-clock text-success" id="reading_report-enddate">--:--</i> </span>
+                                        <span class="time"><i class="fas fa-clock text-dark" id="reading_report-startdate">--:--</i> </span>
+                                        <h3 class="timeline-header"> <a href="#"> reading_report</a> </h3>
+
+                                        <div class="timeline-body">
+                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
+
+                                                <div class="float-right" style="margin-left:auto;" id="load_div_reading_report">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer">
+                                            <a class="btn btn-primary btn-sm" onclick="startExecution(162,'reading_report','')">Start</a>
+                                            <a class="btn btn-danger btn-sm ml-auto" onclick="kill(162,'reading_report')">Kill</a>
                                         </div>
                                     </div>
                                 </div>

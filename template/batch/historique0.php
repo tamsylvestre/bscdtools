@@ -72,7 +72,7 @@
                         </div>
                     </div>
 
-                    <div class="card card-primary card-outline">
+                    <div class="card card-primary card-outline invisible">
                         <div class="card-header">
                             <h3 class="card-title"> BATCH / SEMAINE </h3>
                         </div>
@@ -113,13 +113,27 @@
                             <form action="<?= BASE_URL ?>/batch/historique/facture" method="post">
 
                                 <div class="form-group pointer">
-                                    <label for="exampleSelectBorder"> <code>Semaine 1 </code> </label>
-                                    <input type="week" class="form-control" name="week1" required>
+                                    <label for=""><code>Période 1</code></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control float-right reservation" value="" name="periode1">
+                                    </div>
                                 </div>
 
                                 <div class="form-group pointer">
-                                    <label for="exampleSelectBorder"> <code>Semaine 2 </code> </label>
-                                    <input type="week" class="form-control" name="week2">
+                                    <label for=""><code>Période 1</code></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control float-right reservation" value="" name="periode2">
+                                    </div>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary btn-block"><b>CHECK</b></button>
@@ -238,11 +252,36 @@
                         </div> -->
 
                         <div class="col-12 <?= $facture_graph ?>">
+                            <div class="row">
+                                <div class="chart-title col-md-3 invisible">
+                                    Nombre Facture
+                                </div>
 
-                            <div class="chart-title">
+                                <div class="col-12 col-sm-6 col-md-3 mx-auto">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-cog"></i></span>
 
-                                Nombre Facture
+                                        <div class="info-box-content">
+                                            <span class="info-box-text"><?= $facture_periode1 ?></span>
+                                            <span class="info-box-number">
+                                                <?= number_format($facture_periode1_nbr, 0, ',', ' ') ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <div class="col-12 col-sm-6 col-md-3 mx-auto">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-success accent-1 elevation-1"><i class="fas fa-cog"></i></span>
+
+                                        <div class="info-box-content">
+                                            <span class="info-box-text"><?= $facture_periode2 ?></span>
+                                            <span class="info-box-number">
+                                                <?= number_format($facture_periode2_nbr, 0, ',', ' ') ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div id="graph_facture"></div>
@@ -256,8 +295,7 @@
 
         </div>
 
-        <script>           
-
+        <script>
             ////////////////////// GRAPH FACTURE ////////////////////////////////
 
             var graph_facture = new ApexCharts(document.querySelector("#graph_facture"), {
@@ -268,25 +306,17 @@
                 },
 
                 series: [{
-                        name: "Semaine 1",
+                        name: "<?= $facture_periode1 ?>",
                         data: <?= json_encode($datafacture1) ?>
                     },
                     {
-                        name: "Semaine 2",
+                        name: "<?= $facture_periode2 ?>",
                         data: <?= json_encode($datafacture2) ?>
                     }
                 ],
 
                 xaxis: {
-                    categories: [
-                        "Lundi",
-                        "Mardi",
-                        "Mercredi",
-                        "Jeudi",
-                        "Vendredi",
-                        "Samedi",
-                        "Dimanche"
-                    ]
+                    categories: <?= json_encode($labels1) ?>
                 },
 
                 plotOptions: {
@@ -299,7 +329,7 @@
                 legend: {
                     position: "top"
                 },
-                
+
                 dataLabels: {
                     enabled: true
                 },
@@ -386,7 +416,7 @@
                 }]
 
             });
-            timeline.render();            
+            timeline.render();
 
             var donut = new ApexCharts(document.querySelector("#donut"), {
 
@@ -577,7 +607,6 @@
 
             // });
             // records.render();
-
         </script>
 
     </section>

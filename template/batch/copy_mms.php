@@ -191,27 +191,33 @@
 
 
                     <div class="card">
-                    
-                        <table class='table text-md'>
+
+                        <table class='table'>
                             <thead>
-                                <tr>
+                                <tr class='text-xs'>
                                     <th>CYLCLE ACTUEL</th>
                                     <th>DATE COPIE(FECHAB)</th>
                                     <th>CONFIGURATION COPIE(config.ini)</th>
+                                    <th>Migration N°</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 <tr>
-                                    <td>8</td>
-                                    <td> 20260807 </td>
                                     <td>
-                                        fromDate=2026-08-25 <br>
-                                        toDate=2026-09-03 <br>
-                                        lastTryMv=1 <br>
-                                        lastTryLv=1 <br>
-                                        threads=4 <br>
-                                        closePending=0 <br>
+                                        <pre> 8 </pre>
+                                    </td>
+
+                                    <td>
+                                        <pre> 20260807 </pre>
+                                    </td>
+
+                                    <td>
+                                        <pre><?= htmlspecialchars($config_ini) ?></pre>
+                                    </td>
+
+                                    <td>
+                                        <pre> 4 </pre>
                                     </td>
                                 </tr>
                             </tbody>
@@ -240,7 +246,7 @@
                         </div>
                     </div>
 
-                    <div class="card mt-3" style=" overflow-x : scroll">
+                    <div class="card mt-3" style=" overflow-x : auto">
 
                         <div class="card-header">
                             <h3 class="card-title">RAPPORT</h3>
@@ -276,37 +282,39 @@
                             </thead>
 
                             <tbody>
-                                <?php $i=1; while($i<=4) {  ?>
-                                <tr>
-                                    <td> <?= $i ?> </td>
-                                    <td> MT </td>
-                                    <td> 2601 </td>
-                                    <td> 2082 </td>
-                                    <td> 519 </td>
-                                    <td> 2607 </td>
-                                    <td> 2076 </td>
-                                    <td> 0 </td>
-                                    <td> 2076 </td>
-                                    <td> 531 </td>
-                                    <td> 80% </td>
-                                    <td> 90% </td>
-                                </tr>
-                                <tr>
-                                    <td> <?= $i ?> </td>
-                                    <td> GBT </td>
-                                    <td> 43039 </td>
-                                    <td> 37304 </td>
-                                    <td> 5735 </td>
-                                    <td> 1509 </td>
-                                    <td> 115 </td>
-                                    <td> 327 </td>
-                                    <td> 442 </td>
-                                    <td> 1067 </td>
-                                    <td> 87% </td>
-                                    <td> 89% </td>
-                                </tr>
-                                <?php $i++; } ?>
-                                
+                                <?php $i = 1;
+                                while ($i <= 4) {  ?>
+                                    <tr>
+                                        <td> <?= $i ?> </td>
+                                        <td> MT </td>
+                                        <td> 2601 </td>
+                                        <td> 2082 </td>
+                                        <td> 519 </td>
+                                        <td> 2607 </td>
+                                        <td> 2076 </td>
+                                        <td> 0 </td>
+                                        <td> 2076 </td>
+                                        <td> 531 </td>
+                                        <td> 80% </td>
+                                        <td> 90% </td>
+                                    </tr>
+                                    <tr>
+                                        <td> <?= $i ?> </td>
+                                        <td> GBT </td>
+                                        <td> 43039 </td>
+                                        <td> 37304 </td>
+                                        <td> 5735 </td>
+                                        <td> 1509 </td>
+                                        <td> 115 </td>
+                                        <td> 327 </td>
+                                        <td> 442 </td>
+                                        <td> 1067 </td>
+                                        <td> 87% </td>
+                                        <td> 89% </td>
+                                    </tr>
+                                <?php $i++;
+                                } ?>
+
                             </tbody>
                         </table>
                     </div>
@@ -336,11 +344,55 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Itineraire</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">Itineraire MT</a> </h3>
 
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:16px;">
                                                 <div class="float-left">
+
+                                                    <table class='text-xs width-100'>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <pre>  <i class="fas fa-circle text-dark"> Pending : </i> </pre>
+                                                                </td>
+
+                                                                <td>
+                                                                    <pre> 20260807 </pre>
+                                                                </td>
+
+                                                                <td>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <pre>  <i class="fas fa-unlock text-dark"> Open : </i> </pre>
+                                                                </td>
+
+                                                                <td>
+                                                                    <pre> 20260807 </pre>
+                                                                </td>
+
+                                                                <td>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <pre>  <i class="fas fa-lock text-dark"> Closed : </i> </pre>
+                                                                </td>
+
+                                                                <td>
+                                                                    <pre> 20260807 </pre>
+                                                                </td>
+
+                                                                <td>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
 
                                                 </div>
 
@@ -348,10 +400,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="timeline-footer">
+                                        <div class="timeline-footer text-center">
                                             <a class="btn btn-primary  btn-sm ml-auto" onclick=""> <i class='fas fa-unlock'></i> </a>
                                             <a class="btn btn-danger  btn-sm ml-auto" onclick=""> <i class='fas fa-lock'></i> </a>
-                                            <a class="btn btn-info  btn-sm ml-auto" onclick="check('lecc510')"> <i class='fas fa-eye'></i> </a>
                                         </div>
                                     </div>
                                 </div>
@@ -364,7 +415,49 @@
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:16px;">
                                                 <div class="float-left">
+                                                    <table class='table text-xs border w-90'>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <pre>  zfa_f_request(ES003) : </pre>
+                                                                </td>
 
+                                                                <td>
+                                                                    <pre> 20260807 </pre>
+                                                                </td>
+
+                                                                <td>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                </td>
+                                                            </tr>
+                                                            <tr class="text-wrapper">
+                                                                <td>
+                                                                    <pre> ciclos_itin(IR009) : </pre>
+                                                                </td>
+
+                                                                <td>
+                                                                    <pre> 20260807 </pre>
+                                                                </td>
+
+                                                                <td>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <pre> itiner : </pre>
+                                                                </td>
+
+                                                                <td>
+                                                                    <pre> 20260807 </pre>
+                                                                </td>
+
+                                                                <td>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
 
                                                 <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
@@ -374,6 +467,28 @@
                                         <div class="timeline-footer">
                                             <a class="btn btn-primary btn-sm" onclick="">Start</a>
                                             <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <i class="fas fa-cogs bg-secondary"></i>
+                                    <div class="timeline-item">
+                                        <h3 class="timeline-header"> <a href="#"> Close Manual Itin. MT</a> </h3>
+
+                                        <div class="timeline-body">
+                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
+                                                <div class="float-left">
+
+                                                </div>
+
+                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer">
+                                            <a class="btn btn-primary btn-sm" onclick="">Run</a>
+                                            <a class="btn btn-INFO btn-sm ml-auto" onclick=""><i class='fas fa-eye'></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -400,7 +515,7 @@
                                     </div>
                                 </div>
 
-                                
+
                                 <div>
                                     <i class="fas fa-circle bg-dark"></i>
                                 </div>
