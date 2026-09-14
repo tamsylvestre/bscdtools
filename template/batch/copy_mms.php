@@ -134,50 +134,6 @@
                                 </div>
 
                                 <div>
-                                    <i class="fas fa-cogs bg-secondary"></i>
-                                    <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Anomalies MT</a> </h3>
-
-                                        <div class="timeline-body">
-
-                                            <div class="form-group">
-                                                <label for="exampleInputFile"> <code>upload csv</code></label>
-                                                <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input type="file" name="ref" class="custom-file-input" id="exampleInputFile"
-                                                            accept=".xlsx" required>
-                                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                                                    </div>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text btn">Upload</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="exampleInputFile"> <code>Ajouter compteur</code></label>
-                                                <div class="input-group input-group-md">
-                                                    <input type="text" class="form-control">
-                                                    <span class="input-group-append">
-                                                        <button type="button" class="btn btn-info">
-                                                            <i class="fas fa-plus"></i>
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div class="text-right">
-                                                <span class="btn btn-info btn-sm" onclick=""> <i class="fas fa-eye"></i> </span>
-                                                <span class="btn btn-warning btn-sm" onclick=""> <i class="fas fa-download"></i> </span>
-                                            </div>
-
-                                        </div>
-                                        <div class="timeline-footer">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
                                     <i class="fas fa-clock bg-gray"></i>
                                 </div>
                             </div>
@@ -347,62 +303,53 @@
                                         <h3 class="timeline-header"> <a href="#">Itineraire MT</a> </h3>
 
                                         <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
+                                            <table class='text-xs' style="width:100%">
+                                                <tbody>
+                                                    <tr class="">
+                                                        <td>
+                                                            <i class="fas fa-circle text-dark"> Pending : </i>
+                                                        </td>
 
-                                                    <table class='text-xs width-100'>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    <pre>  <i class="fas fa-circle text-dark"> Pending : </i> </pre>
-                                                                </td>
+                                                        <td>
+                                                            20260807
+                                                        </td>
 
-                                                                <td>
-                                                                    <pre> 20260807 </pre>
-                                                                </td>
+                                                        <td class="py-1">
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <i class="fas fa-unlock text-dark"> Open : </i>
+                                                        </td>
 
-                                                                <td>
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <pre>  <i class="fas fa-unlock text-dark"> Open : </i> </pre>
-                                                                </td>
+                                                        <td>
+                                                            20260807
+                                                        </td>
 
-                                                                <td>
-                                                                    <pre> 20260807 </pre>
-                                                                </td>
+                                                        <td class="py-1">
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <i class="fas fa-lock text-dark"> Closed : </i>
+                                                        </td>
 
-                                                                <td>
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <pre>  <i class="fas fa-lock text-dark"> Closed : </i> </pre>
-                                                                </td>
+                                                        <td>
+                                                            20260807
+                                                        </td>
 
-                                                                <td>
-                                                                    <pre> 20260807 </pre>
-                                                                </td>
-
-                                                                <td>
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc250' style="margin-left:auto;">
-                                                </div>
-                                            </div>
+                                                        <td>
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                         <div class="timeline-footer text-center">
                                             <a class="btn btn-primary  btn-sm ml-auto" onclick=""> <i class='fas fa-unlock'></i> </a>
-                                            <a class="btn btn-danger  btn-sm ml-auto" onclick=""> <i class='fas fa-lock'></i> </a>
+                                            <a class="btn btn-secondary  btn-sm ml-auto" onclick=""> <i class='fas fa-lock'></i> </a>
                                         </div>
                                     </div>
                                 </div>
@@ -414,42 +361,41 @@
 
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-                                                    <table class='table text-xs border w-90'>
+                                                <table class='text-xs w-100'>
                                                         <tbody>
-                                                            <tr>
+                                                            <tr class="p-5">
                                                                 <td>
-                                                                    <pre>  zfa_f_request(ES003) : </pre>
+                                                                    zfa_f_request(ES003) :
                                                                 </td>
 
                                                                 <td>
-                                                                    <pre> 20260807 </pre>
+                                                                    20260807
                                                                 </td>
 
-                                                                <td>
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="text-wrapper">
-                                                                <td>
-                                                                    <pre> ciclos_itin(IR009) : </pre>
-                                                                </td>
-
-                                                                <td>
-                                                                    <pre> 20260807 </pre>
-                                                                </td>
-
-                                                                <td>
+                                                                <td class="py-1">
                                                                     <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <pre> itiner : </pre>
+                                                                    ciclos_itin(IR009) :
                                                                 </td>
 
                                                                 <td>
-                                                                    <pre> 20260807 </pre>
+                                                                    20260807
+                                                                </td>
+
+                                                                <td class="py-1">
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    itiner :
+                                                                </td>
+
+                                                                <td>
+                                                                    20260807
                                                                 </td>
 
                                                                 <td>
@@ -458,10 +404,6 @@
                                                             </tr>
                                                         </tbody>
                                                     </table>
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="timeline-footer">
@@ -487,29 +429,7 @@
                                             </div>
                                         </div>
                                         <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">Run</a>
-                                            <a class="btn btn-INFO btn-sm ml-auto" onclick=""><i class='fas fa-eye'></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <i class="fas fa-cogs bg-secondary"></i>
-                                    <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Block Ano. MT</a> </h3>
-
-                                        <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">Run</a>
+                                            <a class="btn btn-primary btn-sm" onclick="">CLOSE</a>
                                             <a class="btn btn-INFO btn-sm ml-auto" onclick=""><i class='fas fa-eye'></i></a>
                                         </div>
                                     </div>

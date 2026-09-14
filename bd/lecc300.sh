@@ -4,31 +4,22 @@
 . ~/bin/sel_env.sh 1
 
 BIN_DIR=/home/op_ascms/cmsprod/tbatch/bin
-PROD_DIR=/home/op_ascms/cmsprod/tbatch/cms_mra/prod
-
-ID=$(uuidgen | tr -d '-')
-BATCH=cb_stprod
-
-cd "$PROD_DIR" || exit 1
-
-./insert.sh START "$ID" "$BATCH"
-
-START_TIME=$(date +%s)
 
 cd "$BIN_DIR" || exit 1
 
 echo
 echo "===================================================="
-echo -e "\n\tRunning $BATCH for \"$(encrypt -d -i FECHAB)\"\t\tTime is :: $(date '+%Y-%m-%d %H:%M:%S')\n"
+echo -e "\n\tRunning LECC0300 for \"$(encrypt -d -i FECHAB)\"\t\tTime is :: $(date '+%Y-%m-%d %H:%M:%S')\n"
 echo "===================================================="
 
 # ------------------------------------------------------
-# Lancement du batch en arrière-plan
+# Lancement de LECC0300 en arrière-plan
 # ------------------------------------------------------
-./control -pcb_stProd -n35 -s36000 -m32768 &
+"$BIN_DIR/LECC0300" &
+
 PID=$!
 
-echo "PID du batch : $PID"
+echo "PID de LECC0300 : $PID"
 
 # ------------------------------------------------------
 # Heartbeat toutes les 60 secondes
@@ -39,27 +30,19 @@ do
 
     if kill -0 "$PID" 2>/dev/null
     then
-        echo "[HEARTBEAT] $BATCH toujours en cours - $(date '+%Y-%m-%d %H:%M:%S')"
+        echo "[HEARTBEAT] LECC0300 toujours en cours - $(date '+%Y-%m-%d %H:%M:%S')"
     fi
 done
 
 # ------------------------------------------------------
-# Attendre la fin réelle du processus et récupérer
-# son code retour
+# Attendre la fin réelle et récupérer le code retour
 # ------------------------------------------------------
 wait "$PID"
 RET=$?
 
-END_TIME=$(date +%s)
-
 echo "===================================================="
-echo -e "\tEnd of $BATCH for \"$(encrypt -d -i FECHAB)\"\t\tTime is :: $(date '+%Y-%m-%d %H:%M:%S')\n"
+echo -e "\tEnd of LECC0300 for \"$(encrypt -d -i FECHAB)\"\t\tTime is :: $(date '+%Y-%m-%d %H:%M:%S')"
 echo "Code retour : $RET"
-echo "Durée shell : $((END_TIME-START_TIME)) s"
 echo "===================================================="
-
-cd "$PROD_DIR" || exit 1
-
-./insert.sh END "$ID" "$BATCH" "$RET"
 
 exit $RET

@@ -305,7 +305,8 @@
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:16px;">
                                                 <div class="float-left">
-
+                                                    <i class="fas fa-eye text-info"> Itin. Rejeté : </i>
+                                                    <span class="text-bold text-md text-info" id="check_lecc300">-</span>
                                                 </div>
 
                                                 <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
@@ -315,6 +316,7 @@
                                         <div class="timeline-footer">
                                             <a class="btn btn-primary btn-sm" onclick="startExecution(162,'lecc300','')">Start</a>
                                             <a class="btn btn-danger btn-sm ml-auto" onclick="kill(162,'lecc300')">Kill</a>
+                                            <a class="btn btn-info  btn-sm ml-auto" onclick="check('lecc300')"> <i class='fas fa-eye'></i> </a>
                                         </div>
                                     </div>
                                 </div>

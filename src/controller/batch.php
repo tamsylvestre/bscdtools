@@ -2,6 +2,7 @@
 
 use phpseclib3\Net\SSH2;
 use phpseclib3\Net\SFTP;
+use phpseclib3\Crypt\PublicKeyLoader;
 
 require_once('src/repository/CmsRepo.php');
 
@@ -13,7 +14,7 @@ class C_Batch
         'Cfechab'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check-fechab.sh',
         'Sfechab'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/set-fechab.sh',
         'mra_cms_scp3'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check/mra_cms_scp3.sh',
-        'lecc300'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-only-lecc0300.sh',
+        'lecc300'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-only-lecc0300-heat.sh',
         'lecc510' => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0510-log.sh',
         'lecc600'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0600-log.sh',
         'lecc540'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0540-log.sh',
@@ -54,24 +55,35 @@ class C_Batch
     ];
 
     private  $CHECKS = [
-        'lecc510' => "select count(*) c from  ciclos_itin  where est_ciclo_itin='IR009'  order by num_itin",
+        'lecc300' => "select nvl(sum(nl_gen),0) c from ciclos_itin where est_ciclo_itin='IR004'",
+        'lecc510' => "select count(*) c from  ciclos_itin  where est_ciclo_itin='IR009'",
         'lecc600'  => "select  count(*) c  from itiner_aus  where EST_LECT = 'EL003'",
-        'lecc540'  => "select  count(*) c from ciclos_itin  where est_ciclo_itin='IR005'  order by num_itin",
+        'lecc540'  => "select  count(*) c from ciclos_itin  where est_ciclo_itin='IR005' and f_lteor <= sysdate",
         'calcsmo'  => "select  count(*) c from itifact where ind_tratado=2 and ind_embalsado=2 and f_actual>sysdate-30",
         'estimation'  => "select  count(*) c from sum_estimar where ind_tratado=2 and ind_embalsado=2 and f_actual>sysdate-30",
         'facc000'  => "select  count(*) c from serv_facturar where ind_fact=2 and ind_embalsado=2 and f_actual>sysdate-30",
-        'cb_split'  => "select distinct  est_act,  count(*) over(partition by est_act) c from recibos_dispatch where f_actual>sysdate-30 AND est_act = 'ER010'",
-        'cb_conv'  => "select distinct  est_act,  count(*) over(partition by est_act) c from recibos_dispatch where f_actual>sysdate-30 AND est_act = 'ER015'",
-        'cb_stprod'  => "select distinct  est_imagen,  count(*) over(partition by est_imagen) c from imagenes_dispatch where  est_imagen  in ('PS001','PS002') and f_actual>sysdate-30 and est_imagen = 'PS001'",
-        'cb_stext'  => "select distinct  est_imagen,  count(*) over(partition by est_imagen) c from imagenes_dispatch where  est_imagen  in ('PS001','PS002') and f_actual>sysdate-30 and est_imagen = 'PS002'",
-        'nbr_facture'  => "with tmp as (
-                            select /*+ parallel(8) */ b.nom_area as REGION,count(be.num_rec) as NBRE_FACTURE
-                            from business_struct b
-                            join bill_extraction_list be on b.cod_unicom = be.cod_unicom
-                            where be.f_batch_date = date'2026-06-15'
-                            group by b.nom_area
-                            )
-                            select sum( NBRE_FACTURE ) c from tmp"
+        'cb_split'  => "SELECT est_act,
+                            COUNT(*) AS c
+                        FROM recibos_dispatch
+                        WHERE est_act = 'ER010'
+                        AND f_actual >= SYSDATE - 30
+                        GROUP BY est_act",
+        'cb_conv'  => "SELECT est_act,
+                            COUNT(*) AS c
+                        FROM recibos_dispatch
+                        WHERE est_act = 'ER015'
+                        AND f_actual >= SYSDATE - 30
+                        GROUP BY est_act",
+        'cb_stprod'  => "SELECT 'PS001' AS est_imagen,
+                            COUNT(*) AS c
+                        FROM imagenes_dispatch
+                        WHERE est_imagen = 'PS001'
+                        AND f_actual >= SYSDATE - 30",
+        'cb_stext'  => "SELECT 'PS002' AS est_imagen,
+                            COUNT(*) AS c
+                        FROM imagenes_dispatch
+                        WHERE est_imagen = 'PS002'
+                        AND f_actual >= SYSDATE - 30"
     ];
 
     public function __construct()
@@ -91,16 +103,35 @@ class C_Batch
 
     function copy_mms()
     {
-        // $sftp = new SFTP('10.241.110.33', 22, 60);
+        $sftp = new SFTP('10.241.110.33', 22, 60);
 
-        // if (!$sftp->login('sylvestre.tam', 'Monique2026$')) {
-        //     exit('Connexion échouée');
-        // }
+        // Chemin vers la clé privée RSA
+        $keyPath = 'src/lib/id_rsa';
 
-        // $config_ini = $sftp->get('/opt/app/war/configs/config.ini');
-        $config_ini = "";
+        try {
+            // Charger la clé privée
+            $key = PublicKeyLoader::load(
+                file_get_contents($keyPath)
+            );
 
-        require('template/batch/copy_mms.php');
+            // Connexion SFTP avec la clé RSA
+            if (!$sftp->login('sys_emoney', $key)) {
+                exit('Connexion SFTP échouée');
+            }
+
+            // Récupération du fichier
+            $config_ini = $sftp->get('/opt/app/war/configs/config.ini');
+
+            if ($config_ini === false) {
+                exit('Impossible de récupérer config.ini');
+            }
+
+            require('template/batch/copy_mms.php');
+        } catch (\Throwable $e) {
+            // exit('Erreur SFTP : ' . $e->getMessage());
+            $config_ini = "";
+            require('template/batch/copy_mms.php');
+        }
     }
 
     function historique($type)
@@ -136,10 +167,10 @@ class C_Batch
             case 'batch_day':
                 $batch_day_graph = '';
                 $batch_day = $_REQUEST['batch'];
-                $days = explode('|',$_REQUEST['periode']);
+                $days = explode('|', $_REQUEST['periode']);
                 $day1 = $days[0];
                 $day2 = $days[1];
-                $BatchDayData = $this->getBatchDayData($day1,$day2,$batch_day);
+                $BatchDayData = $this->getBatchDayData($day1, $day2, $batch_day);
                 break;
             case 'batch_week':
                 $batch_week_graph = '';
@@ -158,19 +189,18 @@ class C_Batch
                 // // Dernier jour (dimanche)
                 // $date->modify('+6 days');
                 // $day2week1 = $date->format('Y-m-d');
- 
-                $days = explode('|',$_REQUEST['periode1']);
-                $facture_periode1 = $days[0].' à '.$days[1];
 
-                $data1 = $this->getFactureData($days[0],$days[1]);
+                $days = explode('|', $_REQUEST['periode1']);
+                $facture_periode1 = $days[0] . ' à ' . $days[1];
+
+                $data1 = $this->getFactureData($days[0], $days[1]);
 
                 $labels1 = $data1[0];
                 $datafacture1 = $data1[1];
 
                 $facture_periode1_nbr = array_sum($datafacture1);
 
-                if( isset($_POST['periode2']) && !empty($_POST['periode2']) )
-                {
+                if (isset($_POST['periode2']) && !empty($_POST['periode2'])) {
                     // $week2 = $_POST['week2']; 
                     // list($year, $weekNumber) = explode('-W', $week2);
                     // $date = new DateTime();
@@ -183,16 +213,16 @@ class C_Batch
                     // $date->modify('+7 days');
                     // $day2week2 = $date->format('Y-m-d');
 
-                    $days = explode('|',$_REQUEST['periode2']);
-                    $facture_periode2 = $days[0].' à '.$days[1];
+                    $days = explode('|', $_REQUEST['periode2']);
+                    $facture_periode2 = $days[0] . ' à ' . $days[1];
 
-                    $data2 = $this->getFactureData($days[0],$days[1]);
+                    $data2 = $this->getFactureData($days[0], $days[1]);
                     $labels2 = $data2[0];
                     $datafacture2 = $data2[1];
 
                     $facture_periode2_nbr = array_sum($datafacture2);
                 }
-                
+
                 break;
             default:
                 # code...
@@ -212,6 +242,12 @@ class C_Batch
             $host = '10.250.90.200';
             $user = 'sdsa.user';
             $pass = 'Sds@eneo';
+        }
+
+        if ($serveur == '33') {
+            $host = '10.241.110.33';
+            $user = 'sys_emoney';
+            $pass = 'AESEmoney@2011';
         }
 
 
@@ -443,22 +479,22 @@ class C_Batch
         $rows = $repo->getAllWithParams($statement, $params);
         $output = "[";
         foreach ($rows as $item) {
-            $output = $output."{
-            x: \"".$item["BATCH"]."\",
+            $output = $output . "{
+            x: \"" . $item["BATCH"] . "\",
             y: [
-                                new Date(\"".$item["STARTAT"]."\").getTime(),
-                                new Date(\"".$item["ENDAT"]."\").getTime()
+                                new Date(\"" . $item["STARTAT"] . "\").getTime(),
+                                new Date(\"" . $item["ENDAT"] . "\").getTime()
                             ]
             },";
         }
-        $output = $output."]";
+        $output = $output . "]";
 
-        
+
         // var_dump($output);
         return $output;
     }
 
-    private function getBatchDayData($day1,$day2,$batch)
+    private function getBatchDayData($day1, $day2, $batch)
     {
         $repo = new CmsRepository(new DbConnect());
 
@@ -496,28 +532,28 @@ class C_Batch
         $data = [];
         $labels = [];
         foreach ($rows as $item) {
-            $duration[]=$item['DURATION'];
-            $process[]=$item['PROCESS'];
-            $data[]=$item['SPEED'];
-            $labels[]=$item['STARTAT'];
+            $duration[] = $item['DURATION'];
+            $process[] = $item['PROCESS'];
+            $data[] = $item['SPEED'];
+            $labels[] = $item['STARTAT'];
         }
         $output[] = $duration;
         $output[] = $data;
         $output[] = $process;
         $output[] = $labels;
 
-        
+
         // var_dump(json_encode($output[1]));
         // var_dump(($output[1]));
         return $output;
     }
 
-    private function getFactureData($day1,$day2)
+    private function getFactureData($day1, $day2)
     {
         $repo = new CmsRepository(new DbConnect());
 
         $statement =
-        "WITH dates AS (
+            "WITH dates AS (
                 SELECT TO_DATE(:day1, 'YYYY-MM-DD') + LEVEL - 1 AS dt
                 FROM DUAL
                 CONNECT BY LEVEL <= TO_DATE(:day2, 'YYYY-MM-DD') - TO_DATE(:day1, 'YYYY-MM-DD') + 1
@@ -543,8 +579,8 @@ class C_Batch
         $dates = [];
         $nbre = [];
         foreach ($rows as $item) {
-            $dates[]=$item['DATES'];
-            $nbre[]=$item['NBRE_FACTURE'];
+            $dates[] = $item['DATES'];
+            $nbre[] = $item['NBRE_FACTURE'];
         }
         $output[] = $dates;
         $output[] = $nbre;
