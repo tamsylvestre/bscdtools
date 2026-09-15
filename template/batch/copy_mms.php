@@ -414,29 +414,6 @@
                                 </div>
 
                                 <div>
-                                    <i class="fas fa-cogs bg-secondary"></i>
-                                    <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#"> Close Manual Itin. MT</a> </h3>
-
-                                        <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">CLOSE</a>
-                                            <a class="btn btn-INFO btn-sm ml-auto" onclick=""><i class='fas fa-eye'></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div>
                                     <i class="fas fa-circle bg-dark"></i>
                                 </div>
                             </div>
@@ -466,22 +443,56 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Itineraire</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">Itineraire MT</a> </h3>
 
                                         <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
+                                            <table class='text-xs' style="width:100%">
+                                                <tbody>
+                                                    <tr class="">
+                                                        <td>
+                                                            <i class="fas fa-circle text-dark"> Pending : </i>
+                                                        </td>
 
-                                                </div>
+                                                        <td>
+                                                            20260807
+                                                        </td>
 
-                                                <div class="float-right" id='load_div_lecc250' style="margin-left:auto;">
-                                                </div>
-                                            </div>
+                                                        <td class="py-1">
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <i class="fas fa-unlock text-dark"> Open : </i>
+                                                        </td>
+
+                                                        <td>
+                                                            20260807
+                                                        </td>
+
+                                                        <td class="py-1">
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <i class="fas fa-lock text-dark"> Closed : </i>
+                                                        </td>
+
+                                                        <td>
+                                                            20260807
+                                                        </td>
+
+                                                        <td>
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        <div class="timeline-footer">
+                                        <div class="timeline-footer text-center">
                                             <a class="btn btn-primary  btn-sm ml-auto" onclick=""> <i class='fas fa-unlock'></i> </a>
-                                            <a class="btn btn-danger  btn-sm ml-auto" onclick=""> <i class='fas fa-lock'></i> </a>
-                                            <a class="btn btn-info  btn-sm ml-auto" onclick="check('lecc510')"> <i class='fas fa-eye'></i> </a>
+                                            <a class="btn btn-secondary  btn-sm ml-auto" onclick=""> <i class='fas fa-lock'></i> </a>
                                         </div>
                                     </div>
                                 </div>
@@ -498,7 +509,7 @@
                                                 </div>
 
                                                 <div class="float-right" style="margin-left:auto;">
-                                                    <span class="btn btn-warning btn-sm" onclick="change_fechab()"> SPLIT </span>
+                                                    <span class="btn btn-warning btn-sm" onclick=""> SPLIT </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -509,6 +520,65 @@
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
                                         <h3 class="timeline-header"> <a href="#">LECC250</a> </h3>
+
+                                        <div class="timeline-body">
+                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
+                                                <table class='text-xs w-100'>
+                                                        <tbody>
+                                                            <tr class="p-5">
+                                                                <td>
+                                                                    zfa_f_request(ES003) :
+                                                                </td>
+
+                                                                <td>
+                                                                    20260807
+                                                                </td>
+
+                                                                <td class="py-1">
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    ciclos_itin(IR009) :
+                                                                </td>
+
+                                                                <td>
+                                                                    20260807
+                                                                </td>
+
+                                                                <td class="py-1">
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    itiner :
+                                                                </td>
+
+                                                                <td>
+                                                                    20260807
+                                                                </td>
+
+                                                                <td>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer">
+                                            <a class="btn btn-primary btn-sm" onclick="">Start</a>
+                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <i class="fas fa-cogs bg-secondary"></i>
+                                    <div class="timeline-item">
+                                        <h3 class="timeline-header"> <a href="#">Close Manual Itin. 95%</a> </h3>
 
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:16px;">
@@ -530,7 +600,7 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Close Manual Itin. GBT</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">Close Itin. Last Migration</a> </h3>
 
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:16px;">

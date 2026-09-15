@@ -108,30 +108,32 @@ class C_Batch
         // Chemin vers la clé privée RSA
         $keyPath = 'src/lib/id_rsa';
 
-        try {
-            // Charger la clé privée
-            $key = PublicKeyLoader::load(
-                file_get_contents($keyPath)
-            );
+        // try {
+        //     // Charger la clé privée
+        //     $key = PublicKeyLoader::load(
+        //         file_get_contents($keyPath)
+        //     );
 
-            // Connexion SFTP avec la clé RSA
-            if (!$sftp->login('sys_emoney', $key)) {
-                exit('Connexion SFTP échouée');
-            }
+        //     // Connexion SFTP avec la clé RSA
+        //     if (!$sftp->login('sys_emoney', $key)) {
+        //         exit('Connexion SFTP échouée');
+        //     }
 
-            // Récupération du fichier
-            $config_ini = $sftp->get('/opt/app/war/configs/config.ini');
+        //     // Récupération du fichier
+        //     $config_ini = $sftp->get('/opt/app/war/configs/config.ini');
 
-            if ($config_ini === false) {
-                exit('Impossible de récupérer config.ini');
-            }
+        //     if ($config_ini === false) {
+        //         exit('Impossible de récupérer config.ini');
+        //     }
 
-            require('template/batch/copy_mms.php');
-        } catch (\Throwable $e) {
-            // exit('Erreur SFTP : ' . $e->getMessage());
-            $config_ini = "";
-            require('template/batch/copy_mms.php');
-        }
+        //     require('template/batch/copy_mms.php');
+        // } catch (\Throwable $e) {
+        //     // exit('Erreur SFTP : ' . $e->getMessage());
+        //     $config_ini = "";
+        //     require('template/batch/copy_mms.php');
+        // }
+        $config_ini = "";
+        require('template/batch/copy_mms.php');
     }
 
     function historique($type)
@@ -258,7 +260,7 @@ class C_Batch
             'pass'    => $pass,
             'script'  => $this->SCRIPTS[$batch],
             'args'  => $args,
-            'timeout' => 300,
+            'timeout' => 0,
         ];
 
         header('Content-Type: text/event-stream');
