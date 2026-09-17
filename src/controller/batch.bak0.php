@@ -26,7 +26,6 @@ class C_Batch
         'reading_report'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-only-reading-report.sh',
         'cb_split'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-cb_split-log.sh',
         'cb_conv'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-cb_conv-log.sh',
-        'cb_conv_old'  => '/opt/openlink/gencode_batch/bin/run-cb_conv-log.sh',
         'cb_stprod'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-cb-stprod-log.sh',
         'cb_stext'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-cb-stext-log.sh',
         'depose_bt'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-upload-bills.sh',
@@ -51,7 +50,6 @@ class C_Batch
         'reading_report'  => 'reading_report_gen',
         'cb_split'  => 'cb_split',
         'cb_conv'  => 'cb_conv',
-        'cb_conv_old'  => 'cb_conv',
         'cb_stprod'  => 'cb_stProd',
         'cb_stext'  => 'cb_stExt'
     ];
@@ -71,12 +69,6 @@ class C_Batch
                         AND f_actual >= SYSDATE - 30
                         GROUP BY est_act",
         'cb_conv'  => "SELECT est_act,
-                            COUNT(*) AS c
-                        FROM recibos_dispatch
-                        WHERE est_act = 'ER015'
-                        AND f_actual >= SYSDATE - 30
-                        GROUP BY est_act",
-        'cb_conv_old'  => "SELECT est_act,
                             COUNT(*) AS c
                         FROM recibos_dispatch
                         WHERE est_act = 'ER015'
@@ -257,7 +249,7 @@ class C_Batch
         if ($serveur == '33') {
             $host = '10.241.110.33';
             $user = 'sys_emoney';
-            $pass = 'src/lib/id_rsa';
+            $pass = 'AESEmoney@2011';
         }
 
 
@@ -280,36 +272,7 @@ class C_Batch
         set_time_limit(0);
         ignore_user_abort(false);
 
-        try {
-
-            if ($serveur == '33') {
-                $this->runRemoteRSA($config);
-            } else {
-                $this->runRemote($config);
-            }
-        } catch (\Throwable $e) {
-
-            $this->sse(
-                "ERREUR PHP : " . $e->getMessage(),
-                'error'
-            );
-
-            $this->sse('', 'done');
-        }
-    }
-
-    function getRSAKey($keyPath)
-    {
-        try {
-            // Charger la clé privée
-            $key = PublicKeyLoader::load(
-                file_get_contents($keyPath)
-            );
-
-            return $key;
-        } catch (\Throwable $e) {
-            return '';
-        }
+        $this->runRemote($config);
     }
 
     // ─── Helper $this->sse ───────────────────────────────────────────────────────────────
@@ -382,139 +345,6 @@ class C_Batch
         $exitCode = $ssh->getExitStatus();
 
         $this->sse("Script terminé. Code de sortie : {$exitCode}", 'info');
-        $this->sse('', 'done');
-    }
-
-    function runRemoteRSA(array $cfg): void
-    {
-        // 1. Connexion
-        $this->sse(
-            "Connexion à {$cfg['host']}:{$cfg['port']}...",
-            'info'
-        );
-
-        $ssh = new SSH2(
-            $cfg['host'],
-            $cfg['port'],
-            $cfg['timeout']
-        );
-
-        // 2. Chargement de la clé RSA
-        $this->sse(
-            "Chargement de la clé RSA...",
-            'info'
-        );
-
-        try {
-            $key = PublicKeyLoader::load(
-                file_get_contents($cfg['pass'])
-            );
-        } catch (\Throwable $e) {
-            $this->sse(
-                "Impossible de charger la clé RSA : " . $e->getMessage(),
-                'error'
-            );
-            $this->sse('', 'done');
-            return;
-        }
-
-        // 3. Authentification SSH avec la clé RSA
-        $this->sse(
-            "Authentification RSA ({$cfg['user']})...",
-            'info'
-        );
-
-        if (!$ssh->login($cfg['user'], $key)) {
-            $this->sse(
-                "Authentification RSA échouée pour '{$cfg['user']}'",
-                'error'
-            );
-            $this->sse('', 'done');
-            return;
-        }
-
-        $this->sse(
-            "Authentifié avec la clé RSA. Lancement du script...",
-            'info'
-        );
-
-        // 4. Timeout SSH
-        $ssh->setTimeout($cfg['timeout']);
-
-        // 5. Construction de la commande
-        $command  = "chmod +x " . escapeshellarg($cfg['script']);
-        $command .= " && "
-            . escapeshellarg($cfg['script'])
-            . " "
-            . $cfg['args']
-            . " 2>&1";
-
-        if (
-            $cfg['script'] == $this->SCRIPTS['run_check_batchs']
-            || $cfg['script'] == $this->SCRIPTS['mra_cms_scp3']
-        ) {
-            $command = escapeshellarg($cfg['script']) . " 2>&1";
-        }
-
-        if (str_contains($cfg['script'], 'pkill')) {
-            $command =
-                escapeshellarg($cfg['script'])
-                . " "
-                . $cfg['args']
-                . " 2>&1";
-        }
-
-        $buffer = '';
-
-        session_write_close();
-
-        // 6. Exécution avec retour temps réel
-        $ssh->exec(
-            $command,
-            function (string $chunk) use (&$buffer): void {
-
-                session_write_close();
-
-                if (connection_aborted()) {
-                    return;
-                }
-
-                $buffer .= $chunk;
-
-                while (($pos = strpos($buffer, "\n")) !== false) {
-
-                    $line = substr($buffer, 0, $pos);
-
-                    $buffer = substr(
-                        $buffer,
-                        $pos + 1
-                    );
-
-                    $line = rtrim($line, "\r");
-
-                    if ($line !== '') {
-                        $this->sse($line, 'log');
-                    }
-                }
-            }
-        );
-
-        // 7. Dernière ligne éventuelle
-        if (trim($buffer) !== '') {
-            $this->sse(
-                rtrim($buffer, "\r\n"),
-                'log'
-            );
-        }
-
-        // 8. Code retour
-        $exitCode = $ssh->getExitStatus();
-
-        $this->sse(
-            "Script terminé. Code de sortie : {$exitCode}",
-            'info'
-        );
-
         $this->sse('', 'done');
     }
 
