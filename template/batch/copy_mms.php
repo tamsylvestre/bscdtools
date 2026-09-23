@@ -41,9 +41,9 @@
                             </div>
                         </div>
                         <div class="card-body box-profile">
-                            <span class="btn btn-info btn-block" onclick="startExecution('33','Cfechab','')"><b>CHECK-FECHAB</b></span><br>
-                            <span class="btn btn-info btn-block" onclick="startExecution(33,'run_check_batchs','')"><b>RUN-CHECK-BATCHS</b></span><br>
-                            <span class="btn btn-info btn-block" onclick="startExecution('33','Cfechab','')"><b>CONFIG.INI</b></span>
+                            <span class="btn btn-info btn-block" onclick="startExecution('33','cfechab_amr','')"><b>CHECK-FECHAB</b></span><br>
+                            <span class="btn btn-info btn-block" onclick="startExecution(162,'run_check_batchs','')"><b>RUN-CHECK-BATCHS</b></span><br>
+                            <span class="btn btn-info btn-block" onclick="startExecution('33','config_ini','')"><b>CONFIG.INI</b></span>
                         </div>
                     </div>
 
@@ -78,7 +78,28 @@
                                                 </div>
 
                                                 <div class="float-right" style="margin-left:auto;">
-                                                    <span class="btn btn-warning btn-sm" onclick="change_fechab()"> Change </span>
+                                                    <span class="btn btn-warning btn-sm" onclick="change_cycle()"> Change </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <i class="fas fa-cogs bg-secondary"></i>
+                                    <div class="timeline-item">
+                                        <h3 class="timeline-header"> <a href="#">MIGRATION</a> </h3>
+
+                                        <div class="timeline-body">
+                                            <div class="flex" style="display:flex; align-items:center; gap:1px;">
+                                                <div class="float-left">
+                                                    <input type="number" class="form-control" id="inp_fechab" value="1">
+                                                </div>
+
+                                                <div class="float-right" style="margin-left:auto;">
+                                                    <span class="btn btn-warning btn-sm" onclick="change_num_mig()"> Change </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -161,19 +182,19 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <pre> 8 </pre>
+                                        <pre id='cycle_inp'> __ </pre>
                                     </td>
 
                                     <td>
-                                        <pre> 20260807 </pre>
+                                        <pre id='fechab_inp'> __ </pre>
                                     </td>
 
                                     <td>
-                                        <pre><?= htmlspecialchars($config_ini) ?></pre>
+                                        <pre id='config-ini_inp'> __ </pre>
                                     </td>
 
                                     <td>
-                                        <pre> 4 </pre>
+                                        <pre id='migration_inp'> 4 </pre>
                                     </td>
                                 </tr>
                             </tbody>
@@ -639,4 +660,4 @@
 <?php $content = ob_get_clean(); ?>
 
 <?php require('template/layout.php') ?>
-<script src="<?= BASE_URL ?>/template/dist/js/batch.js"></script>
+<script src="<?= BASE_URL ?>/template/dist/js/copy_mms.js"></script>

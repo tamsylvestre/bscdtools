@@ -5,6 +5,7 @@ use phpseclib3\Net\SFTP;
 use phpseclib3\Crypt\PublicKeyLoader;
 
 require_once('src/repository/CmsRepo.php');
+require_once('src/repository/MraRepo.php');
 
 class C_Batch
 {
@@ -14,6 +15,7 @@ class C_Batch
         'Cfechab'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check-fechab.sh',
         'Sfechab'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/set-fechab.sh',
         'mra_cms_scp3'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check/mra_cms_scp3.sh',
+        'cms_mra_scp'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check/cms_mra_scp.sh',
         'lecc300'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-only-lecc0300-heat.sh',
         'lecc510' => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0510-log.sh',
         'lecc600'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0600-log.sh',
@@ -35,10 +37,15 @@ class C_Batch
         'check_bordereau'  => '/u02/VAS_APPS/BORDEREAU-FACTURATION/check-bordereau.sh',
         'lecc300_lecc540'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0300-540-log.sh',
         'facc_cb_prod'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-facturation-facc-to-cb_stprod-log.sh',
+        'cfechab_amr'  => '/opt/openlink/gencode_batch/bin/check-fechab.sh',
+        'sfechab_amr'  => '/opt/openlink/gencode_batch/bin/set-fechab.sh',
+        'lecc0100'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0100-heat.sh',
+        'lecc0200'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0200-heat.sh'
     ];
 
     private  $KILLS = [
         'mra_cms_scp3'  => 'mra_cms_scp3.sh',
+        'cms_mra_scp' => 'cms_mra_scp.sh',
         'lecc300'  => 'LECC0300',
         'lecc510' => 'LECC0510',
         'lecc600'  => 'LECC0600',
@@ -53,7 +60,9 @@ class C_Batch
         'cb_conv'  => 'cb_conv',
         'cb_conv_old'  => 'cb_conv',
         'cb_stprod'  => 'cb_stProd',
-        'cb_stext'  => 'cb_stExt'
+        'cb_stext'  => 'cb_stExt',
+        'lecc0100' => 'LECC0100',
+        'lecc0200' => 'LECC0200'
     ];
 
     private  $CHECKS = [
@@ -91,7 +100,38 @@ class C_Batch
                             COUNT(*) AS c
                         FROM imagenes_dispatch
                         WHERE est_imagen = 'PS002'
-                        AND f_actual >= SYSDATE - 30"
+                        AND f_actual >= SYSDATE - 30",
+        'lecc0100'  => "SELECT
+                            count(*) c
+                            FROM ciclos_itin
+                            WHERE num_ciclo=extract(month from sysdate)
+                            AND est_ciclo_itin ='IR001'
+                            AND num_mrsp not in (2010,2011)
+                            AND F_LTEOR <= (case
+                                when TO_CHAR(sysdate, 'DAY') in ('MONDAY   ','TUESDAY  ','WEDNESDAY','SATURDAY ','SUNDAY   ') then sysdate+2
+                                when TO_CHAR(sysdate, 'DAY') in ('THURSDAY ','FRIDAY   ') then sysdate+4
+                            end)",
+        'lecc0200'  => "SELECT
+                        count(*) c
+                        FROM ciclos_itin
+                        where num_ciclo=extract(month from sysdate)
+                        and est_ciclo_itin ='IR002'",
+        'ir0002'     => "SELECT
+                        count(*) c
+                        FROM
+                        ciclos_itin
+                        WHERE est_ciclo_itin='IR002' 
+                        AND num_ciclo =  EXTRACT(MONTH FROM SYSDATE)",
+        'ir003'     => "SELECT
+                        count(*) c
+                        FROM
+                        ciclos_itin
+                        WHERE est_ciclo_itin='IR003' 
+                        AND num_ciclo =  EXTRACT(MONTH FROM SYSDATE)"
+    ];
+
+    private $FILES = [
+        'config_ini' => "/opt/app/war/configs/config.ini"
     ];
 
     public function __construct()
@@ -111,36 +151,6 @@ class C_Batch
 
     function copy_mms()
     {
-        $sftp = new SFTP('10.241.110.33', 22, 60);
-
-        // Chemin vers la clé privée RSA
-        $keyPath = 'src/lib/id_rsa';
-
-        // try {
-        //     // Charger la clé privée
-        //     $key = PublicKeyLoader::load(
-        //         file_get_contents($keyPath)
-        //     );
-
-        //     // Connexion SFTP avec la clé RSA
-        //     if (!$sftp->login('sys_emoney', $key)) {
-        //         exit('Connexion SFTP échouée');
-        //     }
-
-        //     // Récupération du fichier
-        //     $config_ini = $sftp->get('/opt/app/war/configs/config.ini');
-
-        //     if ($config_ini === false) {
-        //         exit('Impossible de récupérer config.ini');
-        //     }
-
-        //     require('template/batch/copy_mms.php');
-        // } catch (\Throwable $e) {
-        //     // exit('Erreur SFTP : ' . $e->getMessage());
-        //     $config_ini = "";
-        //     require('template/batch/copy_mms.php');
-        // }
-        $config_ini = "";
         require('template/batch/copy_mms.php');
     }
 
@@ -543,6 +553,20 @@ class C_Batch
         print $result['C'];
     }
 
+    function checkitin($date)
+    {
+        $date = str_replace("_", "-", $date);
+        $request = "SELECT COUNT(*) as c
+                    FROM jobs
+                    where source='EXPORT-DATA'
+                    and (status = 'Transport' or status = 'Completed_w_errors')
+                    and date(created_at) = '$date'";
+        $repo = new MraRepository(new DbConnect());
+        $result = $repo->getOne($request);
+
+        print $result['c'];
+    }
+
     function kill($serveur, $batch)
     {
         $btch = 'pkill';
@@ -774,4 +798,44 @@ class C_Batch
         $rows = $repo->getAll($statement);
         return $rows;
     }
+
+    function read_server_file($server,$file)
+    {
+        if($server == '33'){
+            $text = "";
+
+            $sftp = new SFTP('10.241.110.33', 22, 60);
+
+            // Chemin vers la clé privée RSA
+            $keyPath = 'src/lib/id_rsa';
+
+            try {
+                // Charger la clé privée
+                $key = PublicKeyLoader::load(
+                    file_get_contents($keyPath)
+                );
+
+                // Connexion SFTP avec la clé RSA
+                if (!$sftp->login('sys_emoney', $key)) {
+                    exit('Connexion SFTP échouée');
+                }
+
+                // Récupération du fichier
+                $text = $sftp->get($this->FILES[$file]);
+
+                if ($text === false) {
+                    exit('Impossible de récupérer le fichier : '.$file);
+                }
+
+                print $text;
+
+            } catch (\Throwable $e) {
+                 exit('Erreur SFTP : ' . $e->getMessage());
+            }
+
+        
+        }
+
+    }
+
 }

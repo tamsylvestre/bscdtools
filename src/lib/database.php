@@ -111,6 +111,24 @@
             }
         }
 
+        public function getMraDb(): PDO
+        {
+            if($this->database === null)
+            {
+                try{
+                    $this->database = new PDO('mysql:host=192.167.0.21;dbname=datax;charset=utf8', 'jacques.nyog', 'NEW2019user$$',[PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false]);
+                    $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    return $this->database;
+                }catch(PDOException $e){
+                    $error = "ERREUR DE CONNEXION".$e->getMessage();
+                    require("template/error.php");
+                    die();
+                }
+            }
+
+            return $this->database;
+        }
+
     }
 
 

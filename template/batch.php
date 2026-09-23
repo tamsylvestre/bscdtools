@@ -172,6 +172,27 @@
                                 </div>
 
                                 <div>
+                                    <i class="fas fa-cogs bg-secondary"></i>
+                                    <div class="timeline-item">
+                                        <h3 class="timeline-header"> <a href="#">Itin. déposés</a> </h3>
+
+                                        <div class="timeline-body">
+                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
+                                                <div class="float-left">
+                                                    <input type="date" class="form-control" id="inp_Itin" value="<?= date('Y-m-d') ?>">
+                                                </div>
+                                                <div class="float-right" style="margin-left:5px;">
+                                                    <span class="btn btn-warning btn-sm" onclick="checkItin()"> <i class="fas fa-eye"></i> </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer text-center">
+                                            <span class="text-bold text-md text-info" id="check_Itin">...</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
                                     <i class="fas fa-clock bg-gray"></i>
                                 </div>
                             </div>
@@ -251,8 +272,8 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <span class="time"><i class="fas fa-clock text-dark" id="cms_mra_scp-enddate"></i> --:-- </span>
-                                        <span class="time"><i class="fas fa-clock text-success" id="cms_mra_scp-startdate"></i> --:-- </span>
+                                        <span class="time"><i class="fas fa-clock text-dark" id="mra_cms_scp3-enddate"></i> --:-- </span>
+                                        <span class="time"><i class="fas fa-clock text-success" id="mra_cms_scp3-startdate"></i> --:-- </span>
                                         <h3 class="timeline-header"> <a href="#">MRA_CMS_SCP</a> </h3>
 
                                         <div class="timeline-body">
@@ -261,7 +282,7 @@
 
                                                 </div>
 
-                                                <div class="float-right" id='load_div_cms_mra_scp' style="margin-left:auto;">
+                                                <div class="float-right" id='load_div_mra_cms_scp3' style="margin-left:auto;">
                                                 </div>
                                             </div>
                                         </div>
@@ -291,6 +312,104 @@
                                         </div>
                                         <div class="timeline-footer">
                                             <a class="btn btn-primary btn-sm" onclick="startExecution(162,'lecc300_lecc540','')">Start</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <i class="fas fa-cogs bg-secondary"></i>
+                                    <div class="timeline-item bg-warning">
+                                        <span class="time"><i class="fas fa-clock text-success" id="lecc0100-enddate">--:--</i> </span>
+                                        <span class="time"><i class="fas fa-clock text-dark" id="lecc0100-startdate">--:--</i> </span>
+                                        <h3 class="timeline-header"> <a href="#">LECC0100</a> </h3>
+
+                                        <div class="timeline-body">
+                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
+                                                <div class="float-left">
+                                                    <i class="fas fa-clock text-dark"> Start : </i>
+                                                    <span class="emphasis" id="st_lecc0100">-</span> <br>
+                                                    <i class="fas fa-clock text-dark"> . End : </i>
+                                                    <span class="emphasis" id="end_lecc0100">-</span> <br>
+                                                    <i class="fas fa-clock text-dark"> Process : </i>
+                                                    <span class="text-bold text-md text-success" id="pr_lecc0100">-</span><br>
+                                                    <i class="fas fa-eye text-info"> </i>
+                                                    <span class="text-bold text-md text-info" id="check_lecc0100">-</span>                                                    
+                                                    <!-- <i class="fas fa-eye text-white"> IR001 : </i>
+                                                    <span class="text-bold text-md text-white" id="check_ir001">-</span><br>
+                                                    <i class="fas fa-eye text-white"> IR002 : </i>
+                                                    <span class="text-bold text-md text-white" id="check_ir002">-</span> -->
+                                                </div>
+
+                                                <div class="float-right" style="margin-left:auto;" id="load_div_cb_stprod">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer">
+                                            <a class="btn btn-primary btn-sm" onclick="startExecution(162,'lecc0100','')">Start</a>
+                                            <a class="btn btn-danger btn-sm ml-auto" onclick="kill(162,'lecc0100')">Kill</a>
+                                            <a class="btn btn-info  btn-sm ml-auto" onclick="check('lecc0100')"> <i class='fas fa-eye'></i> </a>
+                                            <!-- <a class="btn btn-info  btn-sm ml-auto" onclick="check('ir001')"> <i class='fas fa-eye'></i> IR001 </a>
+                                            <a class="btn btn-info  btn-sm ml-auto" onclick="check('ir002')"> <i class='fas fa-eye'></i> IR002 </a> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <i class="fas fa-cogs bg-secondary"></i>
+                                    <div class="timeline-item bg-warning">
+                                        <span class="time"><i class="fas fa-clock text-success" id="lecc0200-enddate">--:--</i> </span>
+                                        <span class="time"><i class="fas fa-clock text-dark" id="lecc0200-startdate">--:--</i> </span>
+                                        <h3 class="timeline-header"> <a href="#">LECC0200</a> </h3>
+
+                                        <div class="timeline-body">
+                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
+                                                <div class="float-left">
+                                                    <i class="fas fa-clock text-dark"> Start : </i>
+                                                    <span class="emphasis" id="st_lecc0200">-</span> <br>
+                                                    <i class="fas fa-clock text-dark"> . End : </i>
+                                                    <span class="emphasis" id="end_lecc0200">-</span> <br>
+                                                    <i class="fas fa-clock text-dark"> Process : </i>
+                                                    <span class="text-bold text-md text-success" id="pr_lecc0200">-</span><br>
+                                                    <i class="fas fa-eye text-white"> </i>
+                                                    <span class="text-bold text-md text-white" id="check_lecc0200">-</span><br>
+                                                    <!-- <i class="fas fa-eye text-white"> IR003 :  </i>
+                                                    <span class="text-bold text-md text-white" id="check_ir003">-</span> -->
+                                                </div>
+
+                                                <div class="float-right" style="margin-left:auto;" id="load_div_lecc0200">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer">
+                                            <a class="btn btn-primary btn-sm" onclick="startExecution(162,'lecc0200','')">Start</a>
+                                            <a class="btn btn-danger btn-sm ml-auto" onclick="kill(162,'lecc0200')">Kill</a>
+                                            <a class="btn btn-info  btn-sm ml-auto" onclick="check('lecc0200')"> <i class='fas fa-eye'></i> </a>
+                                            <!-- <a class="btn btn-info  btn-sm ml-auto" onclick="check('ir0002')"> <i class='fas fa-eye'></i> IR002 </a>
+                                            <a class="btn btn-info  btn-sm ml-auto" onclick="check('ir003')"> <i class='fas fa-eye'></i> IR003 </a> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <i class="fas fa-cogs bg-secondary"></i>
+                                    <div class="timeline-item bg-warning">
+                                        <span class="time"><i class="fas fa-clock text-dark" id="cms_mra_scp-enddate"></i> --:-- </span>
+                                        <span class="time"><i class="fas fa-clock text-success" id="cms_mra_scp-startdate"></i> --:-- </span>
+                                        <h3 class="timeline-header"> <a href="#">CMS_MRA_SCP</a> </h3>
+
+                                        <div class="timeline-body">
+                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
+                                                <div class="float-left">
+
+                                                </div>
+
+                                                <div class="float-right" id='load_div_cms_mra_scp' style="margin-left:auto;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer">
+                                            <a class="btn btn-primary btn-sm" onclick="startExecution(162,'cms_mra_scp','')">Start</a>
+                                            <a class="btn btn-danger btn-sm ml-auto" onclick="kill(162,'cms_mra_scp')">Kill</a>
                                         </div>
                                     </div>
                                 </div>

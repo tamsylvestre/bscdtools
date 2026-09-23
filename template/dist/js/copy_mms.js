@@ -140,6 +140,10 @@ async function startExecution(serveur, batch, args) {
         );
         setTime(batch,'-enddate');
         checkScript(batch,'end_'+batch);
+
+        if(batch == 'cfechab_amr'||batch == 'sfechab_amr'){
+            read_sever_file(33,'sfechab')
+        }
     });
 
     eventSource.onerror = () => {
@@ -224,7 +228,7 @@ async function change_fechab() {
     let fechval = document.getElementById('inp_fechab').value;
     if (regex.test(fechval)) {
         let treat = fechval.replaceAll('-', '');
-        startExecution(162, 'Sfechab', treat);
+        startExecution(33, 'Sfechab', treat);
     } else {
         alert("Mauvaise date");
     }
@@ -247,11 +251,6 @@ async function depose(type) {
         alert("Mauvaise date");
     }
 
-    // startExecution(200, batch, treat);
-}
-
-async function gen_borderau() {
-    startExecution(200, 'gen_bordereau', '0');
 }
 
 async function checkfacture() {
@@ -339,55 +338,6 @@ async function kill(serveur, batch) {
     };
 }
 
-// async function download_bordereau() {
-
-//     let fechval = document.getElementById('inp_get_bordereau').value;
-//     if (regex.test(fechval)) {
-//         let treat = fechval.replaceAll('-', '');
-//         const response = await fetch(BASE_URL + `/batch/get_bordereau/${treat}`);
-
-//         const total = Number(response.headers.get('Content-Length'));
-
-//         const reader = response.body.getReader();
-
-//         let received = 0;
-//         const chunks = [];
-
-//         while (true) {
-
-//             const { done, value } = await reader.read();
-
-//             if (done) {
-//                 break;
-//             }
-
-//             chunks.push(value);
-
-//             received += value.length;
-
-//             const percent = Math.round(received * 100 / total);
-
-//             document.getElementById('progress').value = percent;
-//             document.getElementById('percent').textContent = percent + '%';
-//         }
-
-//         const blob = new Blob(chunks, { type: 'application/zip' });
-
-//         const url = URL.createObjectURL(blob);
-
-//         const a = document.createElement('a');
-//         a.href = url;
-//         a.download = `BORDEREAU_DVC_${treat}.zip`;
-//         a.click();
-
-//         URL.revokeObjectURL(url);
-
-//     } else {
-//         alert("Mauvaise date");
-//     }
-
-// }
-
 async function download_bordereau() {
 
     let fechval = document.getElementById('inp_get_bordereau').value;
@@ -456,27 +406,19 @@ async function download_bordereau() {
     }
 }
 
-async function checkItin() {
-    document.getElementById('check_Itin').innerHTML = '<i class="fas fa-hourglass-half"></i>';
-    let fechval = document.getElementById('inp_Itin').value;
-    if (regex.test(fechval)) {
-        let treat = fechval.replaceAll('-', '_');
-        try {
-            let URL = BASE_URL + `/batch/checkitin/${treat}`;
-            console.log(URL);
-            const response = await fetch(URL);
+async function read_sever_file(serveur,file){
+    // document.getElementById('check_' + batch).innerHTML = '<i class="fas fa-hourglass-half"></i>';
+    try {
+        let URL = BASE_URL + `/batch/read_server_file/${serveur}/${file}`;
+        const response = await fetch(URL);
 
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
-            const data = await response.json();
-            // alert(data);
-            document.getElementById('check_Itin').innerHTML = data;
-        } catch (error) {
-            console.error('Erreur:', error);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
         }
-    } else {
-        alert("Mauvaise date");
+        const data = await response.json();
+        if(file == 'sfechab_amr'||file == 'cfechab_amr')
+            document.getElementById(`fechab_inp`).innerHTML = data;
+    } catch (error) {
+        console.error('Erreur:', error);
     }
-
 }
