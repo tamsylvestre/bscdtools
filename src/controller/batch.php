@@ -15,7 +15,7 @@ class C_Batch
         'Cfechab'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check-fechab.sh',
         'Sfechab'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/set-fechab.sh',
         'mra_cms_scp3'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check/mra_cms_scp3.sh',
-        'cms_mra_scp'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check/cms_mra_scp.sh',
+        'cms_mra_scp'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/cms_mra_scp.sh',
         'lecc300'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-only-lecc0300-heat.sh',
         'lecc510' => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0510-log.sh',
         'lecc600'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0600-log.sh',
