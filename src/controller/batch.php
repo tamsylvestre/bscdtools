@@ -1096,12 +1096,12 @@ class C_Batch
             'ano_mt' => "SELECT DISTINCT count(*) c FROM itiner WHERE num_mrsp=2010 AND num_ciclo=$cycle  AND  num_apa IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie)"
         ];
 
-        // $repo = new CmsRepository(new DbConnect());
-        // $result = $repo->getOne($STATEMENTS[$batch]);
+        $repo = new CmsRepository(new DbConnect());
+        $result = $repo->getOne($STATEMENTS[$batch]);
 
-        // print $result['c'];
+        print $result['c'];
 
-        var_dump($STATEMENTS);
+        // var_dump($STATEMENTS);
     }
 
     function block_anomalie_mt(){
