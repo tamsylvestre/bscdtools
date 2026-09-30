@@ -907,7 +907,7 @@ class C_Batch
 
             // Récupération du contenu
             $text = $sftp->get($this->FILES[$file]);
-            
+
             return $text;
         }
     }
@@ -1156,7 +1156,7 @@ class C_Batch
     }
 
     function block_anomalie_mt(){
-        $cycle = $this->read_server_file(162, 'cycle162');
+        $cycle = $this->read_server_file_php(162, 'cycle162');
         $statement = "UPDATE ITINER SET CO_al = 'AN313' WHERE  num_ciclo=:cycle  AND num_mrsp=2010 AND num_apa IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie)";
 
         $params =[
