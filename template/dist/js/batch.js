@@ -710,7 +710,7 @@ async function checkbatchMT(batch) {
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
-        const data = await response.json();
+        const data = await response.text();
         // alert(data);
         document.getElementById(`check_${batch}`).innerHTML = data;
         console.log(data);

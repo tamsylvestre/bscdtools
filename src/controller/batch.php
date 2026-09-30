@@ -864,6 +864,54 @@ class C_Batch
         }
     }
 
+    function read_server_file_php($server, $file)
+    {
+        if ($server == '33') {
+            $text = "";
+
+            $sftp = new SFTP('10.241.110.33', 22, 60);
+
+            // Chemin vers la clé privée RSA
+            $keyPath = 'src/lib/id_rsa';
+
+            try {
+                // Charger la clé privée
+                $key = PublicKeyLoader::load(
+                    file_get_contents($keyPath)
+                );
+
+                // Connexion SFTP avec la clé RSA
+                if (!$sftp->login('sys_emoney', $key)) {
+                    exit('Connexion SFTP échouée');
+                }
+
+                // Récupération du fichier
+                $text = $sftp->get($this->FILES[$file]);
+
+                if ($text === false) {
+                    exit('Impossible de récupérer le fichier : ' . $file);
+                }
+
+                return $text;
+            } catch (\Throwable $e) {
+                exit('Erreur SFTP : ' . $e->getMessage());
+            }
+        }
+        elseif ($server == '162') {
+
+            $sftp = new SFTP('10.250.90.162', 22, 60);
+
+            if (!$sftp->login('op_ascms', 'Op3n4dm1n')) {
+                exit('Connexion échouée');
+            }
+
+            // Récupération du contenu
+            $text = $sftp->get($this->FILES[$file]);
+            print $text;
+            return $text;
+        }
+    }
+
     function change_config_ini()
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -1090,7 +1138,7 @@ class C_Batch
 
     function check_batch_mt($batch)
     {
-        $cycle = $this->read_server_file(162, 'cycle162');
+        $cycle = $this->read_server_file_php(162, 'cycle162');
         $STATEMENTS = [
             'block_ano_mt' => "SELECT count(DISTINCT num_apa) c FROM itiner 
                                 WHERE NUM_APA IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie) 
