@@ -1092,7 +1092,7 @@ class C_Batch
     {
         $cycle = $this->read_server_file(162, 'cycle162');
         $STATEMENTS = [
-            'block_ano_mt' => "SELECT count(DISTINCT (num_apa)) * c FROM itiner WHERE NUM_APA IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie) AND num_ciclo=$cycle  AND co_al='AN313' AND num_mrsp=2010",
+            'block_ano_mt' => "SELECT count(DISTINCT (num_apa)) c FROM itiner WHERE NUM_APA IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie) AND num_ciclo=$cycle  AND co_al='AN313' AND num_mrsp=2010",
             'ano_mt' => "SELECT DISTINCT count(*) c FROM itiner WHERE num_mrsp=2010 AND num_ciclo=$cycle  AND  num_apa IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie)"
         ];
 

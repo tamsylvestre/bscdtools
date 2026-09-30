@@ -249,8 +249,8 @@
                                         </div>
                                         <div class="timeline-footer">
                                             <a class="btn btn-primary btn-sm" onclick="BlockAnoMT()">BLOCK</a>
-                                            <a class="btn btn-info  btn-sm ml-auto" onclick="checkbatchMT('block_ano_mt')"> <i class='fas fa-eye'></i> </a>
-                                            <a class="btn btn-dark  btn-sm ml-auto" onclick="checkbatchMT('ano_mt')"> <i class='fas fa-lock'></i> </a>
+                                            <a class="btn btn-info  btn-sm ml-auto" onclick="checkbatchMT('ano_mt')"> <i class='fas fa-eye'></i> </a>
+                                            <a class="btn btn-dark  btn-sm ml-auto" onclick="checkbatchMT('block_ano_mt')"> <i class='fas fa-lock'></i> </a>
                                         </div>
                                     </div>
                                 </div>
