@@ -849,6 +849,19 @@ class C_Batch
                 exit('Erreur SFTP : ' . $e->getMessage());
             }
         }
+        elseif ($server == '162') {
+
+            $sftp = new SFTP('10.250.90.162', 22, 60);
+
+            if (!$sftp->login('op_ascms', 'Op3n4dm1n')) {
+                exit('Connexion échouée');
+            }
+
+            // Récupération du contenu
+            $text = $sftp->get($this->FILES[$file]);
+            print $text;
+            return $text;
+        }
     }
 
     function change_config_ini()
