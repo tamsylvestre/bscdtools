@@ -10,29 +10,29 @@ function setLoadIcon(batch, html) {
     }
 }
 
-function setTime(batch,type) {
-    const el = document.getElementById(`${batch}${type}`);    
+function setTime(batch, type) {
+    const el = document.getElementById(`${batch}${type}`);
     let now = new Date();
-    
+
     if (el) {
         el.innerHTML = now.toLocaleTimeString();
     }
 }
 
-function setCheck(item,value) {
-    const el = document.getElementById(`${item}`); 
-    
+function setCheck(item, value) {
+    const el = document.getElementById(`${item}`);
+
     if (el) {
         el.innerHTML = value;
     }
 
-    if(item.startsWith("st_")){
+    if (item.startsWith("st_")) {
         START = value;
-    }else{
+    } else {
         const batch = item.replace(/^end_/, '');
         END = value;
-        PROCESS = START-END;
-        setCheck('pr_'+batch,PROCESS); 
+        PROCESS = START - END;
+        setCheck('pr_' + batch, PROCESS);
     }
 }
 
@@ -82,94 +82,96 @@ function setStatus(state, text) {
     label.textContent = text;
 }
 
-let START=0,END=0,PROCESS=0;
+let START = 0, END = 0, PROCESS = 0;
 async function startExecution(serveur, batch, args) {
-    setTime(batch,'-startdate');
-    checkScript(batch,'st_'+batch);
-    if (eventSource) {
-        eventSource.close();
-        eventSource = null;
-    }
-
-    clearOutput(false);
-    
-    setStatus('running', 'Connexion en cours...');
-    setLoadIcon(
-        batch,
-        '<div class="loader" style="display:block;"></div>'
-    );
-
-    let URL = BASE_URL + `/batch/execute/${serveur}/${batch}/${args}`;
-    if (args == "") {
-        URL = BASE_URL + `/batch/execute/${serveur}/${batch}/0`;
-    }
-    console.log(URL);
-    eventSource = new EventSource(URL);
-
-
-    eventSource.addEventListener('log', e => {
-        const data = JSON.parse(e.data);
-        addLine(data.text, 'log');
-        setStatus('running', `${lineCount} lignes reçues`);
-    });
-
-    eventSource.addEventListener('info', e => {
-        const data = JSON.parse(e.data);
-        addLine(data.text, 'info');
-    });
-
-    eventSource.addEventListener('warn', e => {
-        const data = JSON.parse(e.data);
-        addLine(data.text, 'warn');
-    });
-
-    eventSource.addEventListener('error_msg', e => {
-        const data = JSON.parse(e.data);
-        addLine(data.text, 'error');
-    });
-
-    eventSource.addEventListener('done', () => {
-        addLine('Script terminé.', 'done');
-        eventSource.close();
-        eventSource = null;
-        //   document.getElementById('btn-run').disabled = false;
-        setStatus('done', `Terminé — ${lineCount} lignes`);
-        setLoadIcon(
-            batch,
-            '<span class="fas fa-check fa-2x text-success"></span>'
-        );
-        setTime(batch,'-enddate');
-        checkScript(batch,'end_'+batch);
-
-        if(batch == 'cfechab_amr'||batch == 'sfechab_amr'){
-            read_sever_file(33,'sfechab')
-        }
-    });
-
-    eventSource.onerror = () => {
-        if (eventSource && eventSource.readyState === EventSource.CLOSED) {
-            addLine('Connexion SSE fermée.', 'warn');
-            setLoadIcon(
-                batch,
-                '<span class="fas fa-exclamation-triangle fa-2x text-danger"></span>'
-            );
-
-        } else {
-            addLine('Erreur de connexion SSE.', 'error');
-            setStatus('error', 'Erreur');
-            setLoadIcon(
-                batch,
-                '<span class="fas fa-warning fa-2x text-danger"></span>'
-            );
-        }
-        setTime(batch,'-enddate');
-        checkScript(batch,'end_'+batch);
+    return new Promise((resolve, reject) => {
+        setTime(batch, '-startdate');
+        checkScript(batch, 'st_' + batch);
         if (eventSource) {
             eventSource.close();
             eventSource = null;
         }
-        
-    };
+
+        clearOutput(false);
+
+        // setStatus('running', 'Connexion en cours...');
+        setLoadIcon(
+            batch,
+            '<div class="loader" style="display:block;"></div>'
+        );
+
+        let URL = BASE_URL + `/batch/execute/${serveur}/${batch}/${args}`;
+        if (args == "") {
+            URL = BASE_URL + `/batch/execute/${serveur}/${batch}/0`;
+        }
+        console.log(URL);
+        eventSource = new EventSource(URL);
+
+
+        eventSource.addEventListener('log', e => {
+            const data = JSON.parse(e.data);
+            addLine(data.text, 'log');
+            setStatus('running', `${lineCount} lignes reçues`);
+        });
+
+        eventSource.addEventListener('info', e => {
+            const data = JSON.parse(e.data);
+            addLine(data.text, 'info');
+        });
+
+        eventSource.addEventListener('warn', e => {
+            const data = JSON.parse(e.data);
+            addLine(data.text, 'warn');
+        });
+
+        eventSource.addEventListener('error_msg', e => {
+            const data = JSON.parse(e.data);
+            addLine(data.text, 'error');
+        });
+
+        eventSource.addEventListener('done', () => {
+            addLine('Script terminé.', 'done');
+            eventSource.close();
+            eventSource = null;
+            //   document.getElementById('btn-run').disabled = false;
+            setStatus('done', `Terminé — ${lineCount} lignes`);
+            setLoadIcon(
+                batch,
+                '<span class="fas fa-check fa-2x text-success"></span>'
+            );
+            setTime(batch, '-enddate');
+            checkScript(batch, 'end_' + batch);
+
+            resolve();
+        });
+
+        eventSource.onerror = () => {
+            if (eventSource && eventSource.readyState === EventSource.CLOSED) {
+                addLine('Connexion SSE fermée.', 'warn');
+                setLoadIcon(
+                    batch,
+                    '<span class="fas fa-exclamation-triangle fa-2x text-danger"></span>'
+                );
+
+            } else {
+                addLine('Erreur de connexion SSE.', 'error');
+                setStatus('error', 'Erreur');
+                setLoadIcon(
+                    batch,
+                    '<span class="fas fa-warning fa-2x text-danger"></span>'
+                );
+            }
+            setTime(batch, '-enddate');
+            checkScript(batch, 'end_' + batch);
+            if (eventSource) {
+                eventSource.close();
+                eventSource = null;
+            }
+
+            reject(new Error('Erreur SSE'));
+
+        };
+    });
 }
 
 function clearOutput(keepReady = true) {
@@ -205,53 +207,108 @@ async function check(batch) {
     }
 }
 
-async function checkScript(batch,label) {
-    try {
-        let URL = BASE_URL + `/batch/check/${batch}`;
-        const response = await fetch(URL);
+async function checkScript(batch, label) {
+    // try {
+    //     let URL = BASE_URL + `/batch/check/${batch}`;
+    //     const response = await fetch(URL);
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-        const data = await response.json();
-        
-        setCheck(label,data);
-    } catch (error) {
-        console.error('Erreur:', error);
-    }
+    //     if (!response.ok) {
+    //         throw new Error(`HTTP ${response.status}`);
+    //     }
+    //     const data = await response.json();
+
+    //     setCheck(label, data);
+    // } catch (error) {
+    //     console.error('Erreur:', error);
+    // }
 }
 
 
 const regex = /^\d{4}-\d{2}-\d{2}$/;
 let deposedate;
-async function change_fechab() {
+async function change_fechab_amr() {
     let fechval = document.getElementById('inp_fechab').value;
     if (regex.test(fechval)) {
         let treat = fechval.replaceAll('-', '');
-        startExecution(33, 'Sfechab', treat);
+        await startExecution(33, 'sfechab_amr', treat);
+        // alert("Mauvaise date");
+        document.getElementById('fechab_lab').innerHTML = await read_sever_file(33, 'fechab');
     } else {
         alert("Mauvaise date");
     }
 
 }
 
-async function depose(type) {
-    let batch = 'depose_bt';
-    if (type == "BT") {
-        deposedate = document.getElementById('inp_depose_bt').value;
-    } else {
-        deposedate = document.getElementById('inp_depose_mt').value;
-        batch = 'depose_mt';
-    }
+async function change_config() {
+    let fromDate = document.getElementById('inp_start_config').value;
+    let toDate = document.getElementById('inp_end_config').value;
+    let last_try = document.getElementById('inp_last_try').value;
 
-    if (regex.test(deposedate)) {
-        let treat = deposedate.replaceAll('-', '');
-        startExecution(162, batch, treat);
+    if (regex.test(fromDate) || regex.test(toDate)) {
+
+        const data = {
+            server: 33,
+            fromDate: fromDate,
+            toDate: toDate,
+            lastTryMv: last_try,
+            lastTryLv: last_try
+        };
+
+        const URL = BASE_URL + '/batch/change_config_ini';
+        console.log(URL);
+
+
+        try {
+
+            const response = await fetch(URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            await startExecution('33', 'sconfig_ini', '');
+            document.getElementById('config-ini_lab').innerHTML =
+                await read_sever_file(33, 'config_ini');
+
+        } catch (e) {
+            console.error(e);
+        }
+
     } else {
         alert("Mauvaise date");
     }
 
 }
+
+async function change_cycle() {
+    let fechval = document.getElementById('inp_cycle').value;
+    if (fechval !== '' && !Number.isNaN(Number(fechval)) && fechval > 0 && fechval <= 12) {
+        await startExecution(33, 'scycle', fechval);
+        document.getElementById('cycle_lab').innerHTML = await read_sever_file(33, 'cycle');
+    } else {
+        alert("Mauvaise Cycle");
+    }
+
+}
+
+async function change_migration() {
+    let fechval = document.getElementById('inp_migration').value;
+    if (fechval !== '' && !Number.isNaN(Number(fechval)) && fechval > 0) {
+        await startExecution(33, 'smigration', fechval);
+        document.getElementById('migration_lab').innerHTML = await read_sever_file(33, 'migration');
+    } else {
+        alert("Mauvaise Cycle");
+    }
+
+}
+
 
 async function checkfacture() {
     document.getElementById('check_nbr_facture').innerHTML = '<i class="fas fa-hourglass-half"></i>';
@@ -406,7 +463,26 @@ async function download_bordereau() {
     }
 }
 
-async function read_sever_file(serveur,file){
+async function checkcopy(batch) {
+    document.getElementById(`check_${batch}`).innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
+    try {
+        let URL = BASE_URL + `/batch/checkitin/${batch}`;
+        console.log(URL);
+        const response = await fetch(URL);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        // alert(data);
+        document.getElementById(`check_${batch}`).innerHTML = data;
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
+
+}
+
+async function read_sever_file(serveur, file) {
     // document.getElementById('check_' + batch).innerHTML = '<i class="fas fa-hourglass-half"></i>';
     try {
         let URL = BASE_URL + `/batch/read_server_file/${serveur}/${file}`;
@@ -415,10 +491,27 @@ async function read_sever_file(serveur,file){
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
-        const data = await response.json();
-        if(file == 'sfechab_amr'||file == 'cfechab_amr')
-            document.getElementById(`fechab_inp`).innerHTML = data;
+        const data = await response.text();
+        // alert(data);
+        // if(file == 'sfechab_amr'||file == 'cfechab_amr')
+        //     document.getElementById(`fechab_lab`).innerHTML = data;
+        return data;
     } catch (error) {
         console.error('Erreur:', error);
+        return '-';
     }
 }
+
+document.addEventListener('DOMContentLoaded', async function () {
+    document.getElementById('config-ini_lab').innerHTML =
+        await read_sever_file(33, 'config_ini');
+
+    document.getElementById('fechab_lab').innerHTML =
+        await read_sever_file(33, 'fechab');
+
+    document.getElementById('cycle_lab').innerHTML =
+        await read_sever_file(33, 'cycle');
+
+    document.getElementById('migration_lab').innerHTML =
+        await read_sever_file(33, 'migration');
+});

@@ -185,7 +185,7 @@ function clearOutput(keepReady = true) {
 }
 
 async function check(batch) {
-    document.getElementById('check_' + batch).innerHTML = '<i class="fas fa-hourglass-half"></i>';
+    document.getElementById('check_' + batch).innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
     try {
         let URL = BASE_URL + `/batch/check/${batch}`;
         const response = await fetch(URL);
@@ -457,7 +457,7 @@ async function download_bordereau() {
 }
 
 async function checkItin() {
-    document.getElementById('check_Itin').innerHTML = '<i class="fas fa-hourglass-half"></i>';
+    document.getElementById('check_Itin').innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
     let fechval = document.getElementById('inp_Itin').value;
     if (regex.test(fechval)) {
         let treat = fechval.replaceAll('-', '_');
@@ -477,6 +477,262 @@ async function checkItin() {
         }
     } else {
         alert("Mauvaise date");
+    }
+
+}
+
+async function uploadAnomalieCSV(){
+
+    const fileInput = document.getElementById('inp_csv_anomalie');
+    const result = document.getElementById('result_upload_anomalie');
+
+    result.innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
+
+    if (!fileInput.files.length) {
+        result.innerHTML = '<span class="text-danger">Veuillez sélectionner un fichier CSV.</span>';
+        return;
+    }
+
+    const file = fileInput.files[0];
+
+    try {
+
+        // Lire le fichier
+        const text = await file.text();
+
+        // Découper en lignes
+        const lines = text.split(/\r?\n/);
+
+        // Récupérer la première colonne
+        const values = [];
+
+        lines.forEach((line, index) => {
+
+            line = line.trim();
+
+            // Ignorer les lignes vides
+            if (!line) {
+                return;
+            }
+
+            // CSV séparé par ;
+            const columns = line.split(';');
+
+            // Première colonne
+            const value = columns[0].trim();
+
+            if (value) {
+                values.push(value);
+            }
+        });
+
+        console.log(values);
+
+        if (values.length === 0) {
+            result.innerHTML =
+                '<span class="text-danger">Aucune donnée trouvée.</span>';
+            return;
+        }
+
+        // Envoyer les données au PHP
+        const response = await fetch(
+            BASE_URL + '/batch/upload_anomalie_mt_csv',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    values: values
+                })
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('Erreur HTTP : ' + response.status);
+        }
+
+        const data = await response.text();
+
+        result.innerHTML =
+            '<span class="text-success">' +
+            data +
+            '</span>';
+
+    } catch (error) {
+
+        console.error(error);
+
+        result.innerHTML =
+            '<span class="text-danger">' +
+            error.message +
+            '</span>';
+    }
+}
+
+async function uploadAnomalie(){
+
+    const Input = document.getElementById('inp_anomalie');
+    const result = document.getElementById('result_upload_anomalie');
+
+    result.innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
+    
+    const values = [Input.value];
+
+    try {
+
+        console.log(values);
+
+        if (values.length === 0) {
+            result.innerHTML =
+                '<span class="text-danger">Aucune donnée trouvée.</span>';
+            return;
+        }
+
+        // Envoyer les données au PHP
+        const response = await fetch(
+            BASE_URL + '/batch/upload_anomalie_mt',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    values: values
+                })
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('Erreur HTTP : ' + response.status);
+        }
+
+        const data = await response.text();
+
+        result.innerHTML =
+            '<span class="text-success">' +
+            data +
+            '</span>';
+
+    } catch (error) {
+
+        console.error(error);
+
+        result.innerHTML =
+            '<span class="text-danger">' +
+            error.message +
+            '</span>';
+    }
+}
+
+async function downloadAnomalieMtCopie() {
+
+    const result = document.getElementById('result_upload_anomalie');
+    try {
+
+        const response = await fetch(BASE_URL + `/batch/downloadAnomalieMtCopie`);
+
+        result.innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
+
+        // Vérifier si le fichier existe
+        if (!response.ok) {
+
+            if (response.status === 404) {
+                alert("Le fichier n'existe pas.");
+            } else {
+                alert("Erreur lors du téléchargement.");
+            }
+            result.innerHTML = '';
+
+            return;
+        }
+
+        const total = Number(response.headers.get('Content-Length'));
+
+        const reader = response.body.getReader();
+
+        let received = 0;
+        const chunks = [];
+
+        while (true) {
+
+            const { done, value } = await reader.read();
+
+            if (done) break;
+
+            chunks.push(value);
+
+            received += value.length;
+
+            if (total > 0) {
+                const percent = Math.round(received * 100 / total);
+                document.getElementById('progress_ano_mt').value = percent;
+                document.getElementById('percent_ano_mt').textContent = percent + '%';
+            }
+        }
+
+        const blob = new Blob(chunks, { type: 'application/zip' });
+
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `AnomalieMT.csv`;
+        a.click();
+
+        URL.revokeObjectURL(url);
+        result.innerHTML = '';
+
+    } catch (err) {
+        console.error(err);
+        alert("Impossible de contacter le serveur.");
+        result.innerHTML = '';
+    }
+}
+
+async function change_cycle() {
+    let fechval = document.getElementById('inp_cycle').value;
+    if (fechval !== '' && !Number.isNaN(Number(fechval)) && fechval > 0 && fechval <= 12) {
+        await startExecution(162, 'scycle162', fechval);
+    } else {
+        alert("Mauvaise Cycle");
+    }
+
+}
+
+async function checkbatchMT(batch) {
+    document.getElementById(`check_${batch}`).innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
+    try {
+        let URL = BASE_URL + `/batch/checkitin/${batch}`;
+        console.log(URL);
+        const response = await fetch(URL);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        // alert(data);
+        document.getElementById(`check_${batch}`).innerHTML = data;
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
+
+}
+
+async function BlockAnoMT() {
+    document.getElementById(`check_${batch}`).innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
+    try {
+        let URL = BASE_URL + `/batch/block_anomalie_mt`;
+        console.log(URL);
+        const response = await fetch(URL);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        await checkbatchMT('block_ano_mt');
+    } catch (error) {
+        console.error('Erreur:', error);
     }
 
 }

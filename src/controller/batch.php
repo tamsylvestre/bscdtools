@@ -37,10 +37,17 @@ class C_Batch
         'check_bordereau'  => '/u02/VAS_APPS/BORDEREAU-FACTURATION/check-bordereau.sh',
         'lecc300_lecc540'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0300-540-log.sh',
         'facc_cb_prod'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-facturation-facc-to-cb_stprod-log.sh',
-        'cfechab_amr'  => '/opt/openlink/gencode_batch/bin/check-fechab.sh',
-        'sfechab_amr'  => '/opt/openlink/gencode_batch/bin/set-fechab.sh',
+        'cfechab_amr'  => '/opt/openlink/gencode_batch/bin_amr/check-fechab.sh',
+        'sfechab_amr'  => '/opt/openlink/gencode_batch/bin_amr/set-fechab.sh',
         'lecc0100'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0100-heat.sh',
-        'lecc0200'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0200-heat.sh'
+        'lecc0200'  => '/home/op_ascms/cmsprod/tbatch/cms_mra/prod/run-lecc0200-heat.sh',
+        'config_ini'  => '/opt/app/war/configs/check-config_ini.sh',
+        'sconfig_ini' => "/opt/app/war/configs/set-config.sh",
+        'scycle' => "/opt/app/war/configs/set-cycle.sh",
+        'smigration' => "/opt/app/war/configs/set-migration.sh",
+        'show_anomalie_copie' => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/show_anomalie_copie.sh",
+        'scycle162' => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/set-cycle.sh",
+        'ccycle162' => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check-cycle.sh"
     ];
 
     private  $KILLS = [
@@ -71,6 +78,7 @@ class C_Batch
         'lecc600'  => "select  count(*) c  from itiner_aus  where EST_LECT = 'EL003'",
         'lecc540'  => "select  count(*) c from ciclos_itin  where est_ciclo_itin='IR005' and f_lteor <= sysdate",
         'calcsmo'  => "select  count(*) c from itifact where ind_tratado=2 and ind_embalsado=2 and f_actual>sysdate-30",
+        'calcsmo_mt'  => "select count(*)/8 c from itifact where ind_tratado=2 and ind_embalsado=2 and num_sum in (select num_sum from sumcon where cod_tar  like '3%') and f_actual>sysdate-30",
         'estimation'  => "select  count(*) c from sum_estimar where ind_tratado=2 and ind_embalsado=2 and f_actual>sysdate-30",
         'facc000'  => "select  count(*) c from serv_facturar where ind_fact=2 and ind_embalsado=2 and f_actual>sysdate-30",
         'cb_split'  => "SELECT est_act,
@@ -131,7 +139,11 @@ class C_Batch
     ];
 
     private $FILES = [
-        'config_ini' => "/opt/app/war/configs/config.ini"
+        'config_ini' => "/opt/app/war/configs/config.ini",
+        'fechab' => "/opt/openlink/gencode_batch/bin_amr/CLEAR_FECHAB",
+        'cycle' => "/opt/app/war/configs/cycle.ini",
+        'migration' => "/opt/app/war/configs/migration.ini",
+        'cycle162' => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/cycle.ini",
     ];
 
     public function __construct()
@@ -254,6 +266,10 @@ class C_Batch
 
     function execute($serveur, $batch, $args)
     {
+        if ($batch == 'sconfig_ini') {
+            $args = $_SESSION['args_config_ini'];
+        }
+
         $host = '10.250.90.162';
         $user = 'op_ascms';
         $pass = 'Op3n4dm1n';
@@ -799,9 +815,9 @@ class C_Batch
         return $rows;
     }
 
-    function read_server_file($server,$file)
+    function read_server_file($server, $file)
     {
-        if($server == '33'){
+        if ($server == '33') {
             $text = "";
 
             $sftp = new SFTP('10.241.110.33', 22, 60);
@@ -824,18 +840,267 @@ class C_Batch
                 $text = $sftp->get($this->FILES[$file]);
 
                 if ($text === false) {
-                    exit('Impossible de récupérer le fichier : '.$file);
+                    exit('Impossible de récupérer le fichier : ' . $file);
                 }
 
                 print $text;
-
+                return $text;
             } catch (\Throwable $e) {
-                 exit('Erreur SFTP : ' . $e->getMessage());
+                exit('Erreur SFTP : ' . $e->getMessage());
             }
+        }
+    }
 
-        
+    function change_config_ini()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+
+        $fromDate  = $data['fromDate'] ?? null;
+        $toDate    = $data['toDate'] ?? null;
+        $lastTryMv = $data['lastTryMv'] ?? null;
+        $lastTryLv = $data['lastTryLv'] ?? null;
+        $server = $data['server'] ?? null;
+
+        $args = $fromDate . ' ' . $toDate . ' ' . $lastTryMv . ' ' . $lastTryLv;
+
+        $_SESSION['args_config_ini'] = $args;
+    }
+
+    function check_copy($batch)
+    {
+        $cycle = $this->read_server_file(33, 'cycle');
+        $STATEMENTS = [
+            'mt_ir003' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle and est_ciclo_itin='IR003' and num_mrsp=2010",
+            'mt_ir033' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle and est_ciclo_itin='IR033' and num_mrsp=2010",
+            'mt_pending' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle and (est_ciclo_itin='IR033' OR est_ciclo_itin='IR003') and num_mrsp=2010",
+            'gbt_ir003' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle and est_ciclo_itin='IR003' and num_mrsp=2011",
+            'gbt_ir033' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle and est_ciclo_itin='IR033' and num_mrsp=2011",
+            'gbt_pending' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle and (est_ciclo_itin='IR033' OR est_ciclo_itin='IR003') and num_mrsp=2011",
+            'mt_es003' => "SELECT count(*) c from zfa_f_request where req_status = 'ES003'",
+            'gbt_es003' => "SELECT count(*) c from zfa_f_request where req_status = 'ES003'",
+            'mt_ir009' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle  and est_ciclo_itin='IR009' and num_mrsp in (2010)",
+            'gbt_ir009' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle  and est_ciclo_itin='IR009' and num_mrsp in (2011)",
+            'mt_itiner' => "SELECT count(*)/8 c from itiner where  num_mrsp = 2010 and num_ciclo=8  and lect_real !=-1",
+            'gbt_itiner' => "SELECT count(*) c from itiner where  num_mrsp = 2011 and num_ciclo=8  and lect_real !=-1"
+        ];
+
+        $repo = new CmsRepository(new DbConnect());
+        $result = $repo->getOne($STATEMENTS[$batch]);
+
+        print $result['c'];
+    }
+
+    function upload_anomalie_mt_csv()
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $values = $data['values'] ?? [];
+
+        if (empty($values)) {
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Aucune donnée reçue'
+            ]);
+
+            return;
         }
 
+        $repo = new CmsRepository(new DbConnect());
+        $repo->truncate('CMS_RFC.anomalie_mt_copie');
+
+        $count = 0;
+
+        foreach ($values as $value) {
+
+            $value = trim($value);
+
+            if ($value === '') {
+                continue;
+            }
+
+            // INSERT Oracle ici
+            $sql = "
+                    INSERT INTO CMS_RFC.anomalie_mt_copie
+                        (num_apa)
+                    VALUES
+                        (:num_apa)
+                ";
+
+            $params = [
+                'num_apa'  => $value
+            ];
+           
+
+            if ($count === 0) {                
+                $count++;
+            }else{
+                if ($repo->insert($sql, $params))
+                    $count++;
+            }
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message' => ($count-1) . ' lignes importees.'
+        ]);
+
+        return;
+    }
+
+    function upload_anomalie_mt()
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $values = $data['values'] ?? [];
+
+        if (empty($values)) {
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Aucune donnée reçue'
+            ]);
+
+            return;
+        }
+
+        $repo = new CmsRepository(new DbConnect());
+
+        $count = 0;
+
+        foreach ($values as $value) {
+
+            $value = trim($value);
+
+            if ($value === '') {
+                continue;
+            }
+
+            // INSERT Oracle ici
+            $sql = "
+                    INSERT INTO CMS_RFC.anomalie_mt_copie
+                        (num_apa)
+                    VALUES
+                        (:num_apa)
+                ";
+
+            $params = [
+                'num_apa'  => $value
+            ];
+
+            if ($repo->insert($sql, $params))
+                $count++;
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message' => $count . ' lignes importees.'
+        ]);
+
+        return;
+    }
+    
+    public function downloadAnomalieMtCopie()
+    {
+        try {
+
+            $repo = new CmsRepository(new DbConnect());
+            $statement = "select * from anomalie_mt_copie order by upload_date desc";
+            $data = $repo->getAll($statement);
+
+            // Racine du projet
+            $directory = dirname(__DIR__, 2) . '/template/exports/batch_mt';
+
+            if (!is_dir($directory)) {
+                mkdir($directory, 0775, true);
+            }
+
+            // Fichier unique
+            $filepath = $directory . '/anomalie_mt_copie.csv';
+
+            // w = écrase le fichier existant
+            $file = fopen($filepath, 'w');
+
+            if (!$file) {
+                throw new Exception(
+                    "Impossible de créer le fichier : " . $filepath
+                );
+            }
+
+            // BOM UTF-8 pour Excel
+            fwrite($file, "\xEF\xBB\xBF");
+
+            // Entêtes
+            fputcsv($file, [
+                'NUM_APA',
+                'UPLOAD_DATE'
+            ], ';');
+
+            // Données
+            foreach ($data as $row) {
+
+                fputcsv($file, [
+                    $row['NUM_APA'],
+                    $row['UPLOAD_DATE']
+                ], ';');
+            }
+
+            fclose($file);
+
+            // Vérification
+            if (!file_exists($filepath)) {
+                throw new Exception("Le fichier CSV n'a pas été créé.");
+            }
+
+            // Envoyer le fichier au navigateur
+            header('Content-Type: text/csv; charset=UTF-8');
+            header('Content-Disposition: attachment; filename="AnomalieMT.csv"');
+            header('Content-Length: ' . filesize($filepath));
+            header('Cache-Control: no-cache, no-store, must-revalidate');
+            header('Pragma: no-cache');
+
+            readfile($filepath);
+
+            exit;
+        } catch (Exception $e) {
+            http_response_code(500);
+
+            echo "Erreur : " . $e->getMessage();
+            exit;
+        }
+    }
+
+    function check_batch_mt($batch)
+    {
+        $cycle = $this->read_server_file(162, 'cycle162');
+        $STATEMENTS = [
+            'block_ano_mt' => "SELECT DISTINCT (num_apa),co_al, num_itin, num_mrsp FROM itiner WHERE NUM_APA IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie) AND num_ciclo=$cycle  AND co_al='AN313' AND num_mrsp=2010",
+            'ano_mt' => "SELECT DISTINCT num_apa,co_al, num_mrsp FROM itiner WHERE num_mrsp=2010 AND num_ciclo=$cycle  AND  num_apa IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie)"
+        ];
+
+        $repo = new CmsRepository(new DbConnect());
+        $result = $repo->getOne($STATEMENTS[$batch]);
+
+        print $result['c'];
+    }
+
+    function block_anomalie_mt(){
+        $cycle = $this->read_server_file(162, 'cycle162');
+        $statement = "UPDATE ITINER SET CO_al = 'AN313' WHERE  num_ciclo=:cycle  AND num_mrsp=2010 AND num_apa IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie)";
+
+        $params =[
+            "cycle" => $cycle
+        ];
+
+        $repo = new CmsRepository(new DbConnect());
+        $result = $repo->update($statement,$params);
+
+        print $result;
     }
 
 }

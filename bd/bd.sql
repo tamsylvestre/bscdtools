@@ -80,13 +80,12 @@ INSERT INTO batch_list VALUES (
 'SELECT COUNT(*) c FROM imagenes_dispatch WHERE f_actual>SYSDATE-30 AND est_imagen=''PS002'''
 );
 
-
-
-DROP IF EXIST copy_mms_config
-CREATE TABLE copy_mms_config (
-    cycle   INTEGER,
-    migration    INTEGER
-);
+-- DROP IF EXIST copy_mms_config
+-- CREATE TABLE copy_mms_config (
+-- 	id varchar(50),
+--     cycle   INTEGER,
+--     migration    INTEGER
+-- );
 
 DROP IF EXIST copy_mms_report
 CREATE TABLE copy_mms_report (
@@ -111,3 +110,21 @@ CREATE TABLE copy_mms_fermeture_manuel (
 
     PRIMARY KEY(cycle,client,migration)
 );
+
+CREATE TABLE anomalie_mt_copie (
+    num_apa    VARCHAR2(16),
+    upload_date DATE DEFAULT SYSDATE
+);
+
+ALTER TABLE CMS_RFC.anomalie_mt_copie
+ADD CONSTRAINT uk_anomalie_mt_copie_num_apa UNIQUE (num_apa);
+
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE anomalie_mt_copie';
+EXCEPTION
+   WHEN OTHERS THEN
+      IF SQLCODE != -942 THEN -- ORA-00942 : table ou vue inexistante
+         RAISE;
+      END IF;
+END;
+/

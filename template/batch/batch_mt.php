@@ -40,8 +40,9 @@
                             </div>
                         </div>
                         <div class="card-body box-profile">
-                            <span class="btn btn-info btn-block" onclick="startExecution('33','Cfechab','')"><b>CHECK-FECHAB</b></span><br>
-                            <span class="btn btn-info btn-block" onclick="startExecution(33,'run_check_batchs','')"><b>RUN-CHECK-BATCHS</b></span>
+                            <span class="btn btn-info btn-block" onclick="startExecution(162,'ccycle162','')"><b>CHECK CYCLE</b></span><br>
+                            <span class="btn btn-info btn-block" onclick="startExecution('162','Cfechab','')"><b>CHECK FECHAB</b></span><br>
+                            <span class="btn btn-info btn-block" onclick="startExecution(162,'run_check_batchs','')"><b>CHECK BATCHS</b></span>
                         </div>
                     </div>
 
@@ -72,11 +73,11 @@
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:1px;">
                                                 <div class="float-left">
-                                                    <input type="number" class="form-control" id="inp_fechab" value="<?= date('m')-1 ?>">
+                                                    <input type="number" class="form-control" id="inp_cycle" value="<?= date('m')-1 ?>">
                                                 </div>
 
                                                 <div class="float-right" style="margin-left:auto;">
-                                                    <span class="btn btn-warning btn-sm" onclick="change_fechab()"> Change </span>
+                                                    <span class="btn btn-warning btn-sm" onclick="change_cycle()"> Change </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -88,7 +89,7 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">FECHAB BIN</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">FECHAB (Date Facturation)</a> </h3>
 
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:1px;">
@@ -117,12 +118,12 @@
                                                 <label for="exampleInputFile"> <code>upload csv</code></label>
                                                 <div class="input-group">
                                                     <div class="custom-file">
-                                                        <input type="file" name="ref" class="custom-file-input" id="exampleInputFile"
-                                                            accept=".xlsx" required>
+                                                        <input type="file" name="ref" class="custom-file-input" id="inp_csv_anomalie"
+                                                            accept=".csv" required>
                                                         <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                                                     </div>
                                                     <div class="input-group-append">
-                                                        <span class="input-group-text btn">Upload</span>
+                                                        <span class="input-group-text btn" onclick="uploadAnomalieCSV()">Upload</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -130,9 +131,9 @@
                                             <div class="form-group">
                                                 <label for="exampleInputFile"> <code>Ajouter compteur</code></label>
                                                 <div class="input-group input-group-md">
-                                                    <input type="text" class="form-control">
+                                                    <input type="text" class="form-control" id="inp_anomalie">
                                                     <span class="input-group-append">
-                                                        <button type="button" class="btn btn-info">
+                                                        <button type="button" class="btn btn-info" onclick="uploadAnomalie()">
                                                             <i class="fas fa-plus"></i>
                                                         </button>
                                                     </span>
@@ -140,8 +141,11 @@
                                             </div>
 
                                             <div class="text-right">
-                                                <span class="btn btn-info btn-sm" onclick=""> <i class="fas fa-eye"></i> </span>
-                                                <span class="btn btn-warning btn-sm" onclick=""> <i class="fas fa-download"></i> </span>
+                                                <i id="result_upload_anomalie"></i>
+                                                <span class="btn btn-info btn-sm" onclick="startExecution('162','show_anomalie_copie','')"> <i class="fas fa-eye"></i> </span>
+                                                <span class="btn btn-warning btn-sm" onclick="downloadAnomalieMtCopie()"> <i class="fas fa-download"></i> </span><br>
+                                                <progress id="progress_ano_mt" value="0" max="100"></progress>
+                                                <span id="percent_ano_mt">0%</span>
                                             </div>
 
                                         </div>
@@ -201,6 +205,7 @@
                             <textarea name="" id="output" class="w-100 h-100 bg-dark text-white" rows="20" disabled></textarea>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="col-3">
@@ -232,16 +237,20 @@
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:16px;">
                                                 <div class="float-left">
-
+                                                    <i class="fas fa-eye text-info"> generated : </i>
+                                                    <span class="text-bold text-md text-info" id="check_ano_mt">-</span><br>
+                                                    <i class="fas fa-lock"> blocked : </i>
+                                                    <span class="text-bold text-md " id="check_block_ano_mt">-</span>
                                                 </div>
 
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
+                                                <div class="float-right" id='' style="margin-left:auto;">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">BLOCK</a>
-                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a>
+                                            <a class="btn btn-primary btn-sm" onclick="BlockAnoMT()">BLOCK</a>
+                                            <a class="btn btn-info  btn-sm ml-auto" onclick="checkbatchMT('block_ano_mt')"> <i class='fas fa-eye'></i> </a>
+                                            <a class="btn btn-dark  btn-sm ml-auto" onclick="checkbatchMT('ano_mt')"> <i class='fas fa-lock'></i> </a>
                                         </div>
                                     </div>
                                 </div>
@@ -326,8 +335,10 @@
                                                     <span class="emphasis" id="end_calcsmo">-</span> <br>
                                                     <i class="fas fa-clock text-dark"> Process : </i>
                                                     <span class="text-bold text-md text-success" id="pr_calcsmo">-</span><br>
-                                                    <i class="fas fa-eye text-info"> </i>
-                                                    <span class="text-bold text-md text-info" id="check_calcsmo">-</span>
+                                                    <i class="fas fa-eye text-info"> GBT :  </i>
+                                                    <span class="text-bold text-md text-info" id="check_calcsmo">-</span><br>
+                                                    <i class="fas fa-eye text-info"> MT : </i>
+                                                    <span class="text-bold text-md text-info" id="check_calcsmo_mt">-</span>
                                                 </div>
 
                                                 <div class="float-right" style="margin-left:auto;" id="load_div_calcsmo">
@@ -337,7 +348,8 @@
                                         <div class="timeline-footer">
                                             <a class="btn btn-primary btn-sm" onclick="startExecution(162,'calcsmo','')">Start</a>
                                             <a class="btn btn-danger btn-sm ml-auto" onclick="kill(162,'calcsmo')">Kill</a>
-                                            <a class="btn btn-info  btn-sm ml-auto" onclick="check('calcsmo')"> <i class='fas fa-eye'></i> </a>
+                                            <a class="btn btn-info  btn-sm ml-auto" onclick="check('calcsmo')"> <i class='fas fa-eye'></i> GBT </a>
+                                            <a class="btn btn-info  btn-sm ml-auto" onclick="check('calcsmo_mt')"> <i class='fas fa-eye'></i> MT </a>
                                         </div>
                                     </div>
                                 </div>
@@ -480,7 +492,7 @@
                 </div>
 
             </div>
-        </div>r
+        </div>
     </section>
 
 </div>

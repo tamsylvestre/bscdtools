@@ -173,6 +173,13 @@ class CmsRepository
         return "Extraction terminé : $rowCount lignes réparties dans " . ($fileCount - 1) . " fichiers.";
     }
 
+    public function getBusinessStructElement($element)
+    {
+        $statement = "SELECT DISTINCT $element FROM CMS_RFC.TB_CUSTOMERS_LIST ORDER BY 1";
+
+        return $this->getAll($statement);
+    }
+
     public function getAll($statement)
     {
         $conn = $this->dbconnect->getCMSDb();
@@ -221,11 +228,198 @@ class CmsRepository
         return $rows;
     }
 
-    public function getBusinessStructElement($element)
+    public function getOne($request)
     {
-        $statement = "SELECT DISTINCT $element FROM CMS_RFC.TB_CUSTOMERS_LIST ORDER BY 1";
+        try {
 
-        return $this->getAll($statement);
+            $conn = $this->dbconnect->getCMSDb();
+
+            $stid = oci_parse($conn, $request);
+
+            if (!oci_execute($stid)) {
+                $error = oci_error($stid);
+                throw new Exception($error['message']);
+            }
+
+            $output = [];
+
+            if ($row = oci_fetch_array($stid, OCI_ASSOC | OCI_RETURN_NULLS)) {
+                $output = $row;
+            }
+
+            oci_free_statement($stid);
+            oci_close($conn);
+
+            return $output;
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+            require("template/error.php");
+        }
     }
-    
+
+    public function getOneWithParams($request, $params)
+    {
+        try {
+
+            $conn = $this->dbconnect->getCMSDb();
+
+            $stid = oci_parse($conn, $request);
+
+            foreach ($params as $key => $value) {
+                oci_bind_by_name($stid, ':' . $key, $params[$key]);
+            }
+
+            if (!oci_execute($stid)) {
+                $error = oci_error($stid);
+                throw new Exception($error['message']);
+            }
+
+            $output = [];
+
+            if ($row = oci_fetch_array($stid, OCI_ASSOC | OCI_RETURN_NULLS)) {
+                $output = $row;
+            }
+
+            oci_free_statement($stid);
+            oci_close($conn);
+
+            return $output;
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+            require("template/error.php");
+        }
+    }
+
+    public function insert($request, $params)
+    {
+        try {
+
+            $conn = $this->dbconnect->getCMSDb();
+
+            $stid = oci_parse($conn, $request);
+
+            foreach ($params as $key => $value) {
+                oci_bind_by_name($stid, ':' . $key, $params[$key]);
+            }
+
+            if (!@oci_execute($stid, OCI_NO_AUTO_COMMIT)) {
+
+                $error = oci_error($stid);
+
+                oci_rollback($conn);
+                oci_free_statement($stid);
+                oci_close($conn);
+
+                // Doublon : num_apa existe déjà
+                if (strpos($error['message'], 'ORA-00001') !== false) {
+                    return false;
+                }
+
+                // Autre erreur : vraie erreur
+                throw new Exception($error['message']);
+            }
+
+            oci_commit($conn);
+
+            oci_free_statement($stid);
+            oci_close($conn);
+
+            return true;
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+            require("template/error.php");
+            die();
+        }
+    }
+
+    public function update($request, $params)
+    {
+        try {
+
+            $conn = $this->dbconnect->getCMSDb();
+
+            $stid = oci_parse($conn, $request);
+
+            foreach ($params as $key => $value) {
+                oci_bind_by_name($stid, ':' . $key, $params[$key]);
+            }
+
+            if (!oci_execute($stid, OCI_NO_AUTO_COMMIT)) {
+                $error = oci_error($stid);
+                oci_rollback($conn);
+
+                throw new Exception($error['message']);
+            }
+
+            oci_commit($conn);
+
+            oci_free_statement($stid);
+            oci_close($conn);
+
+            return true;
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+            require("template/error.php");
+            die();
+        }
+    }
+
+    public function delete($request, $params)
+    {
+        try {
+
+            $conn = $this->dbconnect->getCMSDb();
+
+            $stid = oci_parse($conn, $request);
+
+            foreach ($params as $key => $value) {
+                oci_bind_by_name($stid, ':' . $key, $params[$key]);
+            }
+
+            if (!oci_execute($stid, OCI_NO_AUTO_COMMIT)) {
+                $error = oci_error($stid);
+                oci_rollback($conn);
+
+                throw new Exception($error['message']);
+            }
+
+            oci_commit($conn);
+
+            oci_free_statement($stid);
+            oci_close($conn);
+
+            return true;
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+            require("template/error.php");
+            die();
+        }
+    }
+
+    public function truncate($table)
+    {
+        $statement = 'TRUNCATE TABLE ' . $table;
+
+        $conn = $this->dbconnect->getCMSDb();
+
+        $stid = oci_parse($conn, $statement);
+
+        if (!oci_execute($stid)) {
+            $error = oci_error($stid);
+            oci_free_statement($stid);
+            oci_close($conn);
+
+            throw new Exception($error['message']);
+        }
+
+        oci_free_statement($stid);
+        oci_close($conn);
+
+        return true;
+    }
 }

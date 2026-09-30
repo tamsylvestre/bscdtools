@@ -42,7 +42,7 @@
                         </div>
                         <div class="card-body box-profile">
                             <span class="btn btn-info btn-block" onclick="startExecution('33','cfechab_amr','')"><b>CHECK-FECHAB</b></span><br>
-                            <span class="btn btn-info btn-block" onclick="startExecution(162,'run_check_batchs','')"><b>RUN-CHECK-BATCHS</b></span><br>
+                            <span class="btn btn-info btn-block" onclick="startExecution(33,'run_check_batchs','')"><b>RUN-CHECK-BATCHS</b></span><br>
                             <span class="btn btn-info btn-block" onclick="startExecution('33','config_ini','')"><b>CONFIG.INI</b></span>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:1px;">
                                                 <div class="float-left">
-                                                    <input type="number" class="form-control" id="inp_fechab" value="<?= date('m') - 1 ?>">
+                                                    <input type="number" class="form-control" id="inp_cycle" value="<?= date('m') - 1 ?>">
                                                 </div>
 
                                                 <div class="float-right" style="margin-left:auto;">
@@ -95,11 +95,11 @@
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:1px;">
                                                 <div class="float-left">
-                                                    <input type="number" class="form-control" id="inp_fechab" value="1">
+                                                    <input type="number" class="form-control" id="inp_migration" value="1">
                                                 </div>
 
                                                 <div class="float-right" style="margin-left:auto;">
-                                                    <span class="btn btn-warning btn-sm" onclick="change_num_mig()"> Change </span>
+                                                    <span class="btn btn-warning btn-sm" onclick="change_migration()"> Change </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -120,7 +120,7 @@
                                                 </div>
 
                                                 <div class="float-right" style="margin-left:auto;">
-                                                    <span class="btn btn-warning btn-sm" onclick="change_fechab()"> Change </span>
+                                                    <span class="btn btn-warning btn-sm" onclick="change_fechab_amr()"> Change </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -137,17 +137,17 @@
                                         <div class="timeline-body">
                                             <div class="form-group">
                                                 <label for=""> <code>start</code></label>
-                                                <input type="date" class="form-control" name="annee" value="<?= date('Y-m-d') ?>">
+                                                <input type="date" class="form-control" id="inp_start_config" value="<?= date('Y-m-d') ?>">
                                             </div>
                                             <div class="form-group">
                                                 <label for=""> <code>end</code></label>
-                                                <input type="date" class="form-control" name="annee" value="<?= date('Y-m-d', strtotime('+1 day')) ?>">
+                                                <input type="date" class="form-control" id="inp_end_config" value="<?= date('Y-m-d', strtotime('+1 day')) ?>">
                                             </div>
                                             <div class="form-group">
                                                 <label for=""> <code>last try</code></label>
-                                                <input type="number" class="form-control" name="annee" value="0">
+                                                <input type="number" class="form-control" id="inp_last_try" value="0">
                                             </div>
-                                            <a class="btn btn-info btn-block" onclick="">LAUNCH</a>
+                                            <a class="btn btn-info btn-block" onclick="change_config()">LAUNCH</a>
                                         </div>
                                         <div class="timeline-footer">
                                         </div>
@@ -182,19 +182,19 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <pre id='cycle_inp'> __ </pre>
+                                        <pre id='cycle_lab'> __ </pre>
                                     </td>
 
                                     <td>
-                                        <pre id='fechab_inp'> __ </pre>
+                                        <pre id='fechab_lab'> __ </pre>
                                     </td>
 
                                     <td>
-                                        <pre id='config-ini_inp'> __ </pre>
+                                        <pre id='config-ini_lab'> __ </pre>
                                     </td>
 
                                     <td>
-                                        <pre id='migration_inp'> 4 </pre>
+                                        <pre id='migration_lab'> - </pre>
                                     </td>
                                 </tr>
                             </tbody>
@@ -209,6 +209,7 @@
                                 <div class="dot g"></div>
                             </div>
                             <div class="server-label">
+                                <div id="status-text"></div>
                                 <div id="status-dot"></div>
                                 <span id="server-name">BACTH SERVEUR</span>
                             </div>
@@ -331,12 +332,12 @@
                                                             <i class="fas fa-circle text-dark"> Pending : </i>
                                                         </td>
 
-                                                        <td>
-                                                            20260807
+                                                        <td id="check_mt_pending">
+                                                            -
                                                         </td>
 
                                                         <td class="py-1">
-                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_pending')"> <i class='fas fa-eye'></i> </a><br>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -344,12 +345,12 @@
                                                             <i class="fas fa-unlock text-dark"> Open : </i>
                                                         </td>
 
-                                                        <td>
-                                                            20260807
+                                                        <td id="check_mt_ir003">
+                                                            -
                                                         </td>
 
                                                         <td class="py-1">
-                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_ir003')"> <i class='fas fa-eye'></i> </a><br>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -357,12 +358,12 @@
                                                             <i class="fas fa-lock text-dark"> Closed : </i>
                                                         </td>
 
-                                                        <td>
-                                                            20260807
+                                                        <td id="check_mt_ir033">
+                                                            -
                                                         </td>
 
                                                         <td>
-                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_ir033')"> <i class='fas fa-eye'></i> </a><br>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -371,6 +372,7 @@
                                         <div class="timeline-footer text-center">
                                             <a class="btn btn-primary  btn-sm ml-auto" onclick=""> <i class='fas fa-unlock'></i> </a>
                                             <a class="btn btn-secondary  btn-sm ml-auto" onclick=""> <i class='fas fa-lock'></i> </a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
                                         </div>
                                     </div>
                                 </div>
@@ -389,12 +391,12 @@
                                                                     zfa_f_request(ES003) :
                                                                 </td>
 
-                                                                <td>
-                                                                    20260807
+                                                                <td id="check_mt_es003">
+                                                                    -
                                                                 </td>
 
                                                                 <td class="py-1">
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_es003')"> <i class='fas fa-eye'></i> </a><br>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -402,12 +404,12 @@
                                                                     ciclos_itin(IR009) :
                                                                 </td>
 
-                                                                <td>
-                                                                    20260807
+                                                                <td id="check_mt_ir009">
+                                                                    -
                                                                 </td>
 
                                                                 <td class="py-1">
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_ir009')"> <i class='fas fa-eye'></i> </a><br>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -415,12 +417,12 @@
                                                                     itiner :
                                                                 </td>
 
-                                                                <td>
-                                                                    20260807
+                                                                <td id="check_mt_itiner">
+                                                                    -
                                                                 </td>
 
                                                                 <td>
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_itiner')"> <i class='fas fa-eye'></i> </a><br>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -430,6 +432,7 @@
                                         <div class="timeline-footer">
                                             <a class="btn btn-primary btn-sm" onclick="">Start</a>
                                             <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
                                         </div>
                                     </div>
                                 </div>
@@ -464,7 +467,7 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Itineraire MT</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">Itineraire GBT</a> </h3>
 
                                         <div class="timeline-body">
                                             <table class='text-xs' style="width:100%">
@@ -474,12 +477,12 @@
                                                             <i class="fas fa-circle text-dark"> Pending : </i>
                                                         </td>
 
-                                                        <td>
-                                                            20260807
+                                                        <td id="check_gbt_pending">
+                                                            -
                                                         </td>
 
                                                         <td class="py-1">
-                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_pending')"> <i class='fas fa-eye'></i> </a><br>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -487,12 +490,12 @@
                                                             <i class="fas fa-unlock text-dark"> Open : </i>
                                                         </td>
 
-                                                        <td>
-                                                            20260807
+                                                        <td id="check_gbt_ir003">
+                                                            -
                                                         </td>
 
                                                         <td class="py-1">
-                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_ir003')"> <i class='fas fa-eye'></i> </a><br>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -500,12 +503,12 @@
                                                             <i class="fas fa-lock text-dark"> Closed : </i>
                                                         </td>
 
-                                                        <td>
-                                                            20260807
+                                                        <td id="check_gbt_ir033">
+                                                            -
                                                         </td>
 
                                                         <td>
-                                                            <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_ir033')"> <i class='fas fa-eye'></i> </a><br>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -514,6 +517,7 @@
                                         <div class="timeline-footer text-center">
                                             <a class="btn btn-primary  btn-sm ml-auto" onclick=""> <i class='fas fa-unlock'></i> </a>
                                             <a class="btn btn-secondary  btn-sm ml-auto" onclick=""> <i class='fas fa-lock'></i> </a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
                                         </div>
                                     </div>
                                 </div>
@@ -526,7 +530,7 @@
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:1px;">
                                                 <div class="float-left">
-                                                    <input type="number" class="form-control" id="inp_fechab" value="7">
+                                                    <input type="number" class="form-control" id="inp_split" value="7">
                                                 </div>
 
                                                 <div class="float-right" style="margin-left:auto;">
@@ -551,12 +555,12 @@
                                                                     zfa_f_request(ES003) :
                                                                 </td>
 
-                                                                <td>
-                                                                    20260807
+                                                                <td id="check_gbt_es003">
+                                                                    -
                                                                 </td>
 
                                                                 <td class="py-1">
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_es003')"> <i class='fas fa-eye'></i> </a><br>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -564,12 +568,12 @@
                                                                     ciclos_itin(IR009) :
                                                                 </td>
 
-                                                                <td>
-                                                                    20260807
+                                                                <td id="check_gbt_ir009">
+                                                                    -
                                                                 </td>
 
                                                                 <td class="py-1">
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_ir009')"> <i class='fas fa-eye'></i> </a><br>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -577,12 +581,12 @@
                                                                     itiner :
                                                                 </td>
 
-                                                                <td>
-                                                                    20260807
+                                                                <td id="check_gbt_itiner">
+                                                                    -
                                                                 </td>
 
                                                                 <td>
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick=""> <i class='fas fa-eye'></i> </a><br>
+                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_itiner')"> <i class='fas fa-eye'></i> </a><br>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -592,6 +596,7 @@
                                         <div class="timeline-footer">
                                             <a class="btn btn-primary btn-sm" onclick="">Start</a>
                                             <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
                                         </div>
                                     </div>
                                 </div>
@@ -614,6 +619,7 @@
                                         <div class="timeline-footer">
                                             <a class="btn btn-primary btn-sm" onclick="">Start</a>
                                             <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
                                         </div>
                                     </div>
                                 </div>
@@ -636,6 +642,7 @@
                                         <div class="timeline-footer">
                                             <a class="btn btn-primary btn-sm" onclick="">Start</a>
                                             <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
                                         </div>
                                     </div>
                                 </div>

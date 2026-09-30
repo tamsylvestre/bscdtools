@@ -271,53 +271,6 @@
 
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
-                                    <div class="timeline-item">
-                                        <span class="time"><i class="fas fa-clock text-dark" id="mra_cms_scp3-enddate"></i> --:-- </span>
-                                        <span class="time"><i class="fas fa-clock text-success" id="mra_cms_scp3-startdate"></i> --:-- </span>
-                                        <h3 class="timeline-header"> <a href="#">MRA_CMS_SCP</a> </h3>
-
-                                        <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_mra_cms_scp3' style="margin-left:auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="startExecution(162,'mra_cms_scp3','')">Start</a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="kill(162,'mra_cms_scp3')">Kill</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <i class="fas fa-cogs bg-secondary"></i>
-                                    <div class="timeline-item bg-secondary">
-                                        <span class="time"><i class="fas fa-clock text-success" id="lecc300_lecc540-enddate">--:--</i> </span>
-                                        <span class="time"><i class="fas fa-clock text-dark" id="lecc300_lecc540-startdate">--:--</i> </span>
-                                        <h3 class="timeline-header"> <a href="#">Lecc300-LECC540</a> </h3>
-
-                                        <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300_lecc540' style="margin-left:auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="startExecution(162,'lecc300_lecc540','')">Start</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item bg-warning">
                                         <span class="time"><i class="fas fa-clock text-success" id="lecc0100-enddate">--:--</i> </span>
                                         <span class="time"><i class="fas fa-clock text-dark" id="lecc0100-startdate">--:--</i> </span>
@@ -413,6 +366,34 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div>
+                                    <i class="fas fa-cogs bg-secondary"></i>
+                                    <div class="timeline-item">
+                                        <span class="time"><i class="fas fa-clock text-dark" id="mra_cms_scp3-enddate"></i> --:-- </span>
+                                        <span class="time"><i class="fas fa-clock text-success" id="mra_cms_scp3-startdate"></i> --:-- </span>
+                                        <h3 class="timeline-header"> <a href="#">MRA_CMS_SCP</a> </h3>
+
+                                        <div class="timeline-body">
+                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
+                                                <div class="float-left">
+
+                                                </div>
+
+                                                <div class="float-right" id='load_div_mra_cms_scp3' style="margin-left:auto;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer">
+                                            <a class="btn btn-primary btn-sm" onclick="startExecution(162,'mra_cms_scp3','')">Start</a>
+                                            <a class="btn btn-danger btn-sm ml-auto" onclick="kill(162,'mra_cms_scp3')">Kill</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+
+                                
 
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
@@ -596,29 +577,6 @@
                                             <a class="btn btn-primary btn-sm" onclick="startExecution(162,'estimation','')">Start</a>
                                             <a class="btn btn-danger btn-sm ml-auto" onclick="kill(162,'estimation')">Kill</a>
                                             <a class="btn btn-info  btn-sm ml-auto" onclick="check('estimation')"> <i class='fas fa-eye'></i> </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <i class="fas fa-cogs bg-secondary"></i>
-                                    <div class="timeline-item bg-secondary">
-                                        <span class="time"><i class="fas fa-clock text-success" id="facc_cb_prod-enddate">--:--</i> </span>
-                                        <span class="time"><i class="fas fa-clock text-dark" id="facc_cb_prod-startdate">--:--</i> </span>
-                                        <h3 class="timeline-header"> <a href="#">FACC000-CB-STPROD</a> </h3>
-
-                                        <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_facc_cb_prod' style="margin-left:auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="startExecution(162,'facc_cb_prod','')">Start</a>
                                         </div>
                                     </div>
                                 </div>
@@ -876,6 +834,52 @@
                                             <a class="btn btn-primary btn-sm" onclick="startExecution(162,'cb_stext','')">Start</a>
                                             <a class="btn btn-danger btn-sm ml-auto" onclick="kill(162,'cb_stext')">Kill</a>
                                             <a class="btn btn-info  btn-sm ml-auto" onclick="check('cb_stext')"> <i class='fas fa-eye'></i> </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <i class="fas fa-cogs bg-secondary"></i>
+                                    <div class="timeline-item bg-secondary">
+                                        <span class="time"><i class="fas fa-clock text-success" id="lecc300_lecc540-enddate">--:--</i> </span>
+                                        <span class="time"><i class="fas fa-clock text-dark" id="lecc300_lecc540-startdate">--:--</i> </span>
+                                        <h3 class="timeline-header"> <a href="#">Lecc300-LECC540</a> </h3>
+
+                                        <div class="timeline-body">
+                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
+                                                <div class="float-left">
+
+                                                </div>
+
+                                                <div class="float-right" id='load_div_lecc300_lecc540' style="margin-left:auto;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer">
+                                            <a class="btn btn-primary btn-sm" onclick="startExecution(162,'lecc300_lecc540','')">Start</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <i class="fas fa-cogs bg-secondary"></i>
+                                    <div class="timeline-item bg-secondary">
+                                        <span class="time"><i class="fas fa-clock text-success" id="facc_cb_prod-enddate">--:--</i> </span>
+                                        <span class="time"><i class="fas fa-clock text-dark" id="facc_cb_prod-startdate">--:--</i> </span>
+                                        <h3 class="timeline-header"> <a href="#">FACC000-CB-STPROD</a> </h3>
+
+                                        <div class="timeline-body">
+                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
+                                                <div class="float-left">
+
+                                                </div>
+
+                                                <div class="float-right" id='load_div_facc_cb_prod' style="margin-left:auto;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer">
+                                            <a class="btn btn-primary btn-sm" onclick="startExecution(162,'facc_cb_prod','')">Start</a>
                                         </div>
                                     </div>
                                 </div>
