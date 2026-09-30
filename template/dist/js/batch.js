@@ -703,7 +703,7 @@ async function change_cycle() {
 async function checkbatchMT(batch) {
     document.getElementById(`check_${batch}`).innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
     try {
-        let URL = BASE_URL + `/batch/checkitin/${batch}`;
+        let URL = BASE_URL + `/batch/check_batch_mt/${batch}`;
         console.log(URL);
         const response = await fetch(URL);
 
@@ -712,6 +712,7 @@ async function checkbatchMT(batch) {
         }
         const data = await response.text();
         // alert(data);
+
         document.getElementById(`check_${batch}`).innerHTML = data;
         console.log(data);
     } catch (error) {
