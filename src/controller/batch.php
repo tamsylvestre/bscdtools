@@ -907,7 +907,7 @@ class C_Batch
 
             // Récupération du contenu
             $text = $sftp->get($this->FILES[$file]);
-            print $text;
+            
             return $text;
         }
     }
