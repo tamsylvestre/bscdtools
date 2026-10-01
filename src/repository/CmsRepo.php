@@ -18,7 +18,7 @@ class CmsRepository
     public function getAllUsers($statement): array
     {
 
-        $conn = $this->dbconnect->getCMSDb();
+        $conn = $this->dbconnect->getCMSBatchDb();
         $stid = oci_parse($conn, $statement);
         oci_execute($stid);
 
@@ -340,6 +340,39 @@ class CmsRepository
         try {
 
             $conn = $this->dbconnect->getCMSDb();
+
+            $stid = oci_parse($conn, $request);
+
+            foreach ($params as $key => $value) {
+                oci_bind_by_name($stid, ':' . $key, $params[$key]);
+            }
+
+            if (!oci_execute($stid, OCI_NO_AUTO_COMMIT)) {
+                $error = oci_error($stid);
+                oci_rollback($conn);
+
+                throw new Exception($error['message']);
+            }
+
+            oci_commit($conn);
+
+            oci_free_statement($stid);
+            oci_close($conn);
+
+            return true;
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+            require("template/error.php");
+            die();
+        }
+    }
+
+    public function updateBTCH($request, $params)
+    {
+        try {
+
+            $conn = $this->dbconnect->getCMSBatchDb();
 
             $stid = oci_parse($conn, $request);
 

@@ -1167,7 +1167,7 @@ class C_Batch
 
 
         $repo = new CmsRepository(new DbConnect());
-        $result = $repo->update($statement,$params);
+        $result = $repo->updateBTCH($statement,$params);
 
         print $result;
     }

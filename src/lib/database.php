@@ -111,6 +111,28 @@
             }
         }
 
+        public function getCMSBatchDb() 
+        {
+            try {
+                // Chaîne de connexion via service name (recommandé)
+                // $conn = oci_connect('UTILISATEUR', 'MOT_DE_PASSE', '//HOST:1521/SERVICE_NAME', 'AL32UTF8');
+                $conn = oci_connect('CMS_BTCH', 'ABK_245', '//10.241.151.11:1521/cmsprod.global.aes.com', 'AL32UTF8');
+                // sqlplus CMSRFC/CMS_2016_RFC@//10.241.107.44:1521/cmsprod.global.aes.com
+            
+                if (!$conn) {
+                    $e = oci_error();
+                    throw new Exception($e['message']);
+                }
+            
+                return $conn;
+
+            } catch (Exception $ex) {
+                $error = "Erreur : " . $ex->getMessage();
+                require('template/error.php');
+                die();
+            }
+        }
+
         public function getMraDb(): PDO
         {
             if($this->database === null)
