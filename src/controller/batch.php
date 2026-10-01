@@ -1159,11 +1159,27 @@ class C_Batch
     }
 
     function block_anomalie_mt(){
-        $cycle = $this->read_server_file_php(162, 'cycle162');
-        $params =[
-            "cycle" => $cycle
+        $cycle = trim($this->read_server_file_php(162, 'cycle162'));
+
+        if (!ctype_digit($cycle)) {
+            throw new Exception("Cycle invalide : [" . $cycle . "]");
+        }
+
+        $cycle = (int) $cycle;
+
+        $params = [
+            'cycle' => $cycle
         ];
-        $statement = "UPDATE ITINER SET CO_al = 'AN313' WHERE  num_ciclo=:cycle  AND num_mrsp=2010 AND num_apa IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie)";
+        
+        $statement = "UPDATE ITINER i
+                            SET i.CO_al = 'AN313' 
+                            WHERE  i.num_ciclo=:cycle  
+                            AND i.num_mrsp=2010 
+                            AND EXISTS (
+                                    SELECT 1
+                                    FROM CMS_RFC.anomalie_mt_copie a
+                                    WHERE a.NUM_APA = i.NUM_APA
+                                )";
 
 
         $repo = new CmsRepository(new DbConnect());
