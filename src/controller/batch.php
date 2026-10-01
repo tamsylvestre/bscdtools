@@ -269,6 +269,9 @@ class C_Batch
         if ($batch == 'sconfig_ini') {
             $args = $_SESSION['args_config_ini'];
         }
+        elseif ($batch == 'show_anomalie_copie') {
+            $args =  $this->read_server_file_php(162, 'cycle162');
+        }
 
         $host = '10.250.90.162';
         $user = 'op_ascms';
@@ -1157,11 +1160,11 @@ class C_Batch
 
     function block_anomalie_mt(){
         $cycle = $this->read_server_file_php(162, 'cycle162');
-        $statement = "UPDATE ITINER SET CO_al = 'AN313' WHERE  num_ciclo=:cycle  AND num_mrsp=2010 AND num_apa IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie)";
-
         $params =[
             "cycle" => $cycle
         ];
+        $statement = "UPDATE ITINER SET CO_al = 'AN313' WHERE  num_ciclo=:cycle  AND num_mrsp=2010 AND num_apa IN (SELECT num_apa FROM CMS_RFC.anomalie_mt_copie)";
+
 
         $repo = new CmsRepository(new DbConnect());
         $result = $repo->update($statement,$params);

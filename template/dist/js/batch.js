@@ -722,7 +722,8 @@ async function checkbatchMT(batch) {
 }
 
 async function BlockAnoMT() {
-    document.getElementById(`check_${batch}`).innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
+    // document.getElementById(`block_ano_mt`).innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
+    await checkbatchMT('block_ano_mt');
     try {
         let URL = BASE_URL + `/batch/block_anomalie_mt`;
         console.log(URL);
@@ -731,7 +732,8 @@ async function BlockAnoMT() {
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
-        const data = await response.json();
+        const data = await response.text();
+        console.log(data);
         await checkbatchMT('block_ano_mt');
     } catch (error) {
         console.error('Erreur:', error);
