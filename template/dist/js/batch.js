@@ -723,10 +723,11 @@ async function checkbatchMT(batch) {
 
 async function BlockAnoMT() {
     // document.getElementById(`block_ano_mt`).innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
-    await checkbatchMT('block_ano_mt');
+    // await checkbatchMT('block_ano_mt');
     try {
         let URL = BASE_URL + `/batch/block_anomalie_mt`;
         console.log(URL);
+        document.getElementById('check_block_ano_mt').innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
         const response = await fetch(URL);
 
         if (!response.ok) {

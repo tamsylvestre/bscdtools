@@ -18,7 +18,198 @@
 
         function users()
         {
-            $users = $this->getUsers();
+            $statement = 
+            "
+                    WITH DATA_A AS (
+                                SELECT DISTINCT
+                                    S.NOM_AREA,
+                                    S.NOM_ZONA,
+                                    A.COD_UNICOM,
+                                    B.NOM_UNICOM,
+                                    U.NOM_USR,
+                                    A.DESC_USR,
+                                    U.NOM_PERFIL,
+                                    P.DESC_PERFIL,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 1, 10))
+                                        AS SECOND_PROFILE,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 12, 10))
+                                        AS AUX_SEC_PROFILE_1,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 23, 10))
+                                        AS AUX_SEC_PROFILE_2,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 34, 10))
+                                        AS AUX_SEC_PROFILE_3,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 45, 10))
+                                        AS AUX_SEC_PROFILE_4,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 56, 10))
+                                        AS AUX_SEC_PROFILE_5,
+                                    U.F_ACTUAL AS LAST_MODIFICATION_DATE,
+                                        (SELECT MAX (F_ACTUAL)
+                                        FROM ICSAUDIT.ADT_USUARIO U
+                                        WHERE DESC_ACTION = 'CREATED' AND NOM_USR = A.NOM_USR)
+                                        AS CREATION_DATE,
+                                        (SELECT MAX (USUARIO)
+                                        FROM ICSAUDIT.ADT_USUARIO U
+                                        WHERE DESC_ACTION = 'CREATED' AND NOM_USR = A.NOM_USR)
+                                        AS CREATION_BY,
+                                        (SELECT LAST_LOGIN FROM DBA_USERS WHERE USERNAME=U.NOM_USR) LAST_LOGIN_DATE
+                                FROM CMSADMIN.USUARIO_PERFIL U,
+                                    CMSADMIN.PERFILES P,
+                                    CMSADMIN.USUARIOS A,
+                                    CMSADMIN.UNICOM B,
+                                    CMSADMIN.BUSINESS_STRUCT S
+                                WHERE     U.NOM_PERFIL = P.NOM_PERFIL
+                                    AND A.NOM_USR = U.NOM_USR
+                                    AND B.COD_UNICOM = A.COD_UNICOM
+                                    AND S.COD_UNICOM = B.COD_UNICOM),
+                                    
+                                DATA_B AS ( 
+                                SELECT DISTINCT
+                                    S.NOM_AREA,
+                                    S.NOM_ZONA,
+                                    A.COD_UNICOM,
+                                    B.NOM_UNICOM,
+                                    U.NOM_USR,
+                                    A.DESC_USR,
+                                    U.NOM_PERFIL,
+                                    P.DESC_PERFIL,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 1, 10))
+                                        AS SECOND_PROFILE,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 12, 10))
+                                        AS AUX_SEC_PROFILE_1,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 23, 10))
+                                        AS AUX_SEC_PROFILE_2,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 34, 10))
+                                        AS AUX_SEC_PROFILE_3,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 45, 10))
+                                        AS AUX_SEC_PROFILE_4,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 56, 10))
+                                        AS AUX_SEC_PROFILE_5,
+                                    U.F_ACTUAL AS LAST_MODIFICATION_DATE,
+                                    (SELECT MIN (F_ACTUAL)
+                                        FROM ICSAUDIT.ADT_USUARIO U
+                                        WHERE DESC_ACTION = 'PASSWORD CHANGE' AND NOM_USR = A.NOM_USR)
+                                        AS CREATION_DATE,
+                                    (SELECT MAX (USUARIO)
+                                        FROM ICSAUDIT.ADT_USUARIO U
+                                        WHERE DESC_ACTION = 'PASSWORD CHANGE' AND NOM_USR = A.NOM_USR)
+                                        AS CREATION_BY,
+                                    (SELECT LAST_LOGIN FROM DBA_USERS WHERE USERNAME=U.NOM_USR) LAST_LOGIN_DATE
+                                FROM CMSADMIN.USUARIO_PERFIL U,
+                                    CMSADMIN.PERFILES P,
+                                    CMSADMIN.USUARIOS A,
+                                    CMSADMIN.UNICOM B,
+                                    CMSADMIN.BUSINESS_STRUCT S
+                                WHERE     U.NOM_PERFIL = P.NOM_PERFIL
+                                    AND A.NOM_USR = U.NOM_USR
+                                    AND B.COD_UNICOM = A.COD_UNICOM
+                                    AND S.COD_UNICOM = B.COD_UNICOM
+                                    AND U.NOM_USR=(SELECT NOM_USR FROM DATA_A WHERE NOM_USR=U.NOM_USR AND CREATION_DATE IS NULL AND CREATION_BY IS NULL)
+                                )
+
+                                SELECT * FROM DATA_A WHERE CREATION_DATE IS NOT NULL AND CREATION_BY IS NOT NULL
+                                UNION
+                                SELECT * FROM DATA_B
+                                UNION
+                                SELECT DISTINCT
+                                    S.NOM_AREA,
+                                    S.NOM_ZONA,
+                                    A.COD_UNICOM,
+                                    B.NOM_UNICOM,
+                                    U.NOM_USR,
+                                    A.DESC_USR,
+                                    U.NOM_PERFIL,
+                                    P.DESC_PERFIL,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 1, 10))
+                                        AS SECOND_PROFILE,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 12, 10))
+                                        AS AUX_SEC_PROFILE_1,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 23, 10))
+                                        AS AUX_SEC_PROFILE_2,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 34, 10))
+                                        AS AUX_SEC_PROFILE_3,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 45, 10))
+                                        AS AUX_SEC_PROFILE_4,
+                                    (SELECT M.DESC_PERFIL
+                                        FROM CMSADMIN.USUARIO_PERFIL_SEC T, CMSADMIN.PERFILES M
+                                        WHERE     T.NOM_USR = U.NOM_USR
+                                            AND M.NOM_PERFIL = SUBSTR (T.NOM_PERFIL_DET, 56, 10))
+                                        AS AUX_SEC_PROFILE_5,
+                                    U.F_ACTUAL AS LAST_MODIFICATION_DATE,
+                                    (SELECT CREATED
+                                        FROM DBA_USERS
+                                        WHERE USERNAME = A.NOM_USR)
+                                        AS CREATION_DATE,
+                                    (SELECT MAX (USUARIO)
+                                        FROM ICSAUDIT.ADT_USUARIO U
+                                        WHERE DESC_ACTION = 'PASSWORD CHANGE' AND NOM_USR = A.NOM_USR)
+                                        AS CREATION_BY,
+                                    (SELECT LAST_LOGIN FROM DBA_USERS WHERE USERNAME = U.NOM_USR) LAST_LOGIN_DATE
+                                FROM CMSADMIN.USUARIO_PERFIL U,
+                                    CMSADMIN.PERFILES P,
+                                    CMSADMIN.USUARIOS A,
+                                    CMSADMIN.UNICOM B,
+                                    CMSADMIN.BUSINESS_STRUCT S
+                                WHERE     U.NOM_PERFIL = P.NOM_PERFIL
+                                    AND A.NOM_USR = U.NOM_USR
+                                    AND B.COD_UNICOM = A.COD_UNICOM
+                                    AND S.COD_UNICOM = B.COD_UNICOM
+                                    AND U.NOM_USR=(SELECT NOM_USR FROM DATA_A WHERE NOM_USR=U.NOM_USR AND CREATION_DATE IS NULL AND CREATION_BY IS NULL)
+                                    AND U.NOM_USR=(SELECT NOM_USR FROM DATA_B WHERE NOM_USR=U.NOM_USR AND CREATION_DATE IS NULL AND CREATION_BY IS NULL)
+            ";
+            $repo = new CmsRepository(new DbConnect());
+            $users = $repo->getAll($statement);
+            // $users = $this->getUsers();
 
             require("template/cms_users.php");
         }

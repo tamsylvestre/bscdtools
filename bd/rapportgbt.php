@@ -34,101 +34,24 @@ $repo = new CmsRepository(new DbConnect());
 $statementMigration = 
 "
     SELECT DISTINCT
-        adt.NUM_CICLO AS cycle,
-        s.nom_area AS region,
-        s.nom_zona AS division,
-        s.nom_unicom AS agence,
-        s.cod_unicom,
-        adt.num_mrsp,
-        su.usr_number2 AS ref_geo,
-        adt.F_LREAL AS date_releve,
-        adt.F_LECT_ANT,
-        adt.NUM_SUM,
-        s.nis_rad AS service_no,
-        estado(su.est_serv) AS status_contrat,
-        s.cust_name,
-        adt.num_APA AS compteur,
+        i.num_itin num_itineraire,
+        c.nom_unicom agence,
+        i.num_ciclo num_cycle,
+        c.num_mrsp code_mrc,
+        i.ruta,
+        i.est_ciclo_itin statut_itineraire,
+        i.f_lreal date_lecture,
+        i.f_gen date_generation,
+        i.f_ftrat date_traitement,
+        i.nl_anom pl_en_anomalie,
+        i.nl_gen pl_generes,
+        i.nl_ok pl_lus,
+        c.desc_itin,
+        i.f_actual
 
-        MAX(
-            CASE
-                WHEN adt.TIP_CSMO = 'CO003'
-                THEN adt.lect_real
-                ELSE 0
-            END
-        ) OVER(PARTITION BY adt.num_sum) AS ACTIVE_OFF_PEAK_IMP,
-
-        MAX(
-            CASE
-                WHEN adt.TIP_CSMO = 'CO002'
-                THEN adt.lect_real
-                ELSE 0
-            END
-        ) OVER(PARTITION BY adt.num_sum) AS ACTIVE_PEAK_IMP,
-
-        MAX(
-            CASE
-                WHEN adt.TIP_CSMO = 'CO008'
-                THEN adt.lect_real
-                ELSE 0
-            END
-        ) OVER(PARTITION BY adt.num_sum) AS ACTIVE_OFF_PEAK_EXP,
-
-        MAX(
-            CASE
-                WHEN adt.TIP_CSMO = 'CO007'
-                THEN adt.lect_real
-                ELSE 0
-            END
-        ) OVER(PARTITION BY adt.num_sum) AS ACTIVE_PEAK_EXP,
-
-        MAX(
-            CASE
-                WHEN adt.TIP_CSMO = 'CO005'
-                THEN adt.lect_real
-                ELSE 0
-            END
-        ) OVER(PARTITION BY adt.num_sum) AS REACTIVE_OFF_PEAK_IMP,
-
-        MAX(
-            CASE
-                WHEN adt.TIP_CSMO = 'CO025'
-                THEN adt.lect_real
-                ELSE 0
-            END
-        ) OVER(PARTITION BY adt.num_sum) AS REACTIVE_PEAK_IMP,
-
-        MAX(
-            CASE
-                WHEN adt.TIP_CSMO = 'CO016'
-                THEN adt.lect_real
-                ELSE 0
-            END
-        ) OVER(PARTITION BY adt.num_sum) AS POWER_MIN,
-
-        MAX(
-            CASE
-                WHEN adt.TIP_CSMO = 'CO026'
-                THEN adt.lect_real
-                ELSE 0
-            END
-        ) OVER(PARTITION BY adt.num_sum) AS POWER_MAX
-
-    FROM ITINER adt
-
-    JOIN cmsreport.tb_customers_infos s
-        ON adt.num_sum = s.num_sum
-
-    JOIN CMSADMIN.SUMCON su
-        ON su.nis_rad = s.nis_rad
-
-    JOIN ciclos_itin c
-        ON c.num_itin = adt.num_itin
-    AND c.num_ciclo = adt.num_ciclo
-
-    WHERE adt.NUM_MRSP = {$mrsp}
-    AND adt.num_ciclo = {$cycle}
-    AND s.cod_tar LIKE '3%'
-    AND c.est_ciclo_itin = 'IR003'
+        from cmsreport.tb_customers_infos c
+        left join ciclos_itin i on i.num_itin= c.num_itin
+        where i.num_ciclo={$cycle}  and i.nl_gen!=0 and i.num_mrsp=2011 and i.est_ciclo_itin in('IR006')
 ";
 
 
@@ -147,50 +70,40 @@ $rowsMigration = $repo->getAll($statementMigration);
 */
 $statementCompteur = 
 "
-    WITH data AS (
+   select distinct
+            s.nom_area REGION
+            ,s.cod_unicom cod_agence
+            ,s.nom_unicom AGENCE
+            ,s.nis_rad service_num,
+            i.lect_real index_lu,
+            i.num_apa,
+            s.cust_name,
+            af.num_sum service_point,
+            af.num_af,
+            af.f_gen,
+            bt.co_an code_ano,
+            (select co.desc_cod from codigos co where bt.co_an=co.cod ) libelle_ano,
+            bt.num_os,
+            bt.tip_os
+            ,(select t.DESC_TIPO from tipos t where bt.tip_os = t.tipo) libelle_os
+            ,(select es.desc_est from estados es where af.est_af = es.estado) statut_anomalie
+            ,(select es.desc_est from estados es where  s.est_serv=es.estado) statut_contrat
+            ,(select t.DESC_TIPO from tipos t where  af.tip_fact=t.tipo) billing_type
+            ,af.usuario,
+            af.f_actual,
+            af.f_fact,
+            af.f_gen,
+            af.f_uce
 
-        SELECT DISTINCT
-            i.num_apa
+FROM cmsadmin.trabpend_af AF
+join cmsreport.tb_customers_infos s on af.num_sum = s.num_sum
+join cmsadmin.itiner i on af.num_sum = i.num_sum and i.num_ciclo=9 and i.num_mrsp in (2011) /*and i.lect_real = -1*/
+left join cmsadmin.an_trabpend_af bt on af.num_af = bt.num_af
 
-        FROM itiner i
-
-        WHERE i.num_ciclo = {$cycle}
-        AND i.num_mrsp = {$mrsp}
-
-        AND EXISTS (
-            SELECT 1
-            FROM trabpend_af t
-
-            WHERE t.num_sum = i.num_sum
-                AND t.f_actual > SYSDATE - 1
-                AND t.programa LIKE 'LECC0510_c'
-        )
-    )
-
-    SELECT
-        d.num_apa,
-        'Compteur en anomalie' AS observation
-
-    FROM data d
-
-    UNION ALL
-
-    SELECT
-        a.num_apa,
-        'Compteur non généré' AS observation
-
-    FROM CMS_RFC.anomalie_mt_copie a
-
-    WHERE NOT EXISTS (
-
-        SELECT 1
-        FROM itiner i
-
-        WHERE i.num_apa = a.num_apa
-        AND i.num_ciclo = {$cycle}
-        AND i.co_al = 'AN313'
-        AND i.num_mrsp = {$mrsp}
-    )
+WHERE af.f_gen BETWEEN /*sysdate-3/24*/ date'2026-09-31' AND date'2026-10-04'-1/86400
+AND (select es.desc_est from estados es where af.est_af= es.estado) LIKE 'NOT BILLED%'
+AND (select es.desc_est from estados es where  af.num_sum=s.num_sum and s.est_serv=es.estado) NOT LIKE 'INACT%'
+AND S.cod_tar  NOT LIKE '3%'
 ";
 
 
@@ -426,21 +339,6 @@ fillExcelSheet(
 
 /*
 |--------------------------------------------------------------------------
-| ONGLET 3
-|--------------------------------------------------------------------------
-*/
-$spreadsheet->createSheet();
-
-fillExcelSheet(
-    $spreadsheet,
-    2,
-    'Anomalie MT',
-    $rowsAnomalie
-);
-
-
-/*
-|--------------------------------------------------------------------------
 | DOSSIER DE SORTIE
 |--------------------------------------------------------------------------
 */
@@ -456,7 +354,7 @@ if (!is_dir($outputDir)) {
 | NOM DU FICHIER
 |--------------------------------------------------------------------------
 */
-$filename = 'Rapport Migration MT 08-2026_01.xlsx';
+$filename = 'Rapport Anomalies GBT 08-2026_01.xlsx';
 
 $filepath = $outputDir . DIRECTORY_SEPARATOR . $filename;
 

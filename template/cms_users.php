@@ -43,7 +43,7 @@
                                 <th>LAST_MODIFICATION_DATE</th>
                                 <th>CREATION_DATE</th>
                                 <th>CREATION_BY</th>
-                                <th>LAST_CHANGED_PASSWORD</th>
+                                <th>LAST_LOGIN_DATE</th>
                             </tr>
                         </thead>
 
@@ -67,7 +67,7 @@
                                 <td> <?= $row["LAST_MODIFICATION_DATE"] ?> </td>
                                 <td> <?= $row["CREATION_DATE"] ?> </td>
                                 <td> <?= $row["CREATION_BY"] ?> </td>
-                                <td> <?= $row["LAST_CHANGED_PASSWORD"] ?> </td>
+                                <td> <?= $row["LAST_LOGIN_DATE"] ?> </td>
                             </tr>
                             <?php } ?>
                         </tbody>

@@ -73,7 +73,7 @@
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:1px;">
                                                 <div class="float-left">
-                                                    <input type="number" class="form-control" id="inp_cycle" value="<?= date('m')-1 ?>">
+                                                    <input type="number" class="form-control" id="inp_cycle" value="<?= date('m') - 1 ?>">
                                                 </div>
 
                                                 <div class="float-right" style="margin-left:auto;">
@@ -335,7 +335,7 @@
                                                     <span class="emphasis" id="end_calcsmo">-</span> <br>
                                                     <i class="fas fa-clock text-dark"> Process : </i>
                                                     <span class="text-bold text-md text-success" id="pr_calcsmo">-</span><br>
-                                                    <i class="fas fa-eye text-info"> GBT :  </i>
+                                                    <i class="fas fa-eye text-info"> GBT : </i>
                                                     <span class="text-bold text-md text-info" id="check_calcsmo">-</span><br>
                                                     <i class="fas fa-eye text-info"> MT : </i>
                                                     <span class="text-bold text-md text-info" id="check_calcsmo_mt">-</span>
@@ -445,17 +445,14 @@
                                         <h3 class="timeline-header"> <a href="#">Rapport MT</a> </h3>
 
                                         <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
+                                            <div class="form-group">
+                                                <label for=""> <code>Num. Migration</code></label>
+                                                <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
+                                                <input type="number" class="form-control" id="inp_fer_man" value="0">
                                             </div>
+                                            <a class="btn btn-info btn-block" onclick="fermer_manuel()">DOWNLOAD</a>
                                         </div>
                                         <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">DOWNLOAD</a>
                                         </div>
                                     </div>
                                 </div>
@@ -466,17 +463,14 @@
                                         <h3 class="timeline-header"> <a href="#">Rapport GBT</a> </h3>
 
                                         <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
+                                            <div class="form-group">
+                                                <label for=""> <code>Num. Migration</code></label>
+                                                <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
+                                                <input type="number" class="form-control" id="inp_fer_man" value="0">
                                             </div>
+                                            <a class="btn btn-info btn-block" onclick="fermer_manuel()">DOWNLOAD</a>
                                         </div>
                                         <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick=""> DOWNLOAD </a>
                                         </div>
                                     </div>
                                 </div>

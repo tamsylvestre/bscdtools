@@ -466,17 +466,18 @@ async function download_bordereau() {
 async function checkcopy(batch) {
     document.getElementById(`check_${batch}`).innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
     try {
-        let URL = BASE_URL + `/batch/checkitin/${batch}`;
+        let URL = BASE_URL + `/batch/check_copy/${batch}`;
         console.log(URL);
         const response = await fetch(URL);
 
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
-        const data = await response.json();
-        // alert(data);
+        const data = await response.text();
+        console.log(data);
         document.getElementById(`check_${batch}`).innerHTML = data;
     } catch (error) {
+        console.log(error);
         console.error('Erreur:', error);
     }
 

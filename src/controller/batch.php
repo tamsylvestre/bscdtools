@@ -47,7 +47,8 @@ class C_Batch
         'smigration' => "/opt/app/war/configs/set-migration.sh",
         'show_anomalie_copie' => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/show_anomalie_copie.sh",
         'scycle162' => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/set-cycle.sh",
-        'ccycle162' => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check-cycle.sh"
+        'ccycle162' => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check-cycle.sh",
+        'lecc0250mt'  => '/opt/openlink/gencode_batch/bin_amr/set-fechab.sh',
     ];
 
     private  $KILLS = [
@@ -933,7 +934,12 @@ class C_Batch
 
     function check_copy($batch)
     {
-        $cycle = $this->read_server_file(33, 'cycle');
+        $cycle = trim($this->read_server_file_php(33, 'cycle'));
+
+        if (!ctype_digit($cycle)) {
+            throw new Exception("Cycle invalide : [" . $cycle . "]");
+        }
+
         $STATEMENTS = [
             'mt_ir003' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle and est_ciclo_itin='IR003' and num_mrsp=2010",
             'mt_ir033' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle and est_ciclo_itin='IR033' and num_mrsp=2010",
@@ -945,14 +951,17 @@ class C_Batch
             'gbt_es003' => "SELECT count(*) c from zfa_f_request where req_status = 'ES003'",
             'mt_ir009' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle  and est_ciclo_itin='IR009' and num_mrsp in (2010)",
             'gbt_ir009' => "SELECT count(*) c from ciclos_itin where num_ciclo=$cycle  and est_ciclo_itin='IR009' and num_mrsp in (2011)",
-            'mt_itiner' => "SELECT count(*)/8 c from itiner where  num_mrsp = 2010 and num_ciclo=8  and lect_real !=-1",
-            'gbt_itiner' => "SELECT count(*) c from itiner where  num_mrsp = 2011 and num_ciclo=8  and lect_real !=-1"
+            'mt_itiner' => "SELECT count(*)/8 c from itiner where  num_mrsp = 2010 and num_ciclo=$cycle  and lect_real !=-1",
+            'gbt_itiner' => "SELECT count(*) c from itiner where  num_mrsp = 2011 and num_ciclo=$cycle  and lect_real !=-1",
+            'mt_meter_pending' => "SELECT count(*)/8 c from itiner where  num_mrsp = 2010 and num_ciclo=$cycle  and lect_real =-1",
+            'gbt_meter_pending' => "SELECT count(*) c from itiner where  num_mrsp = 2011 and num_ciclo=$cycle  and lect_real =-1"
         ];
 
         $repo = new CmsRepository(new DbConnect());
         $result = $repo->getOne($STATEMENTS[$batch]);
 
         print $result['C'];
+
     }
 
     function upload_anomalie_mt_csv()

@@ -322,14 +322,14 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Itineraire MT</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">Checks MT</a> </h3>
 
                                         <div class="timeline-body">
                                             <table class='text-xs' style="width:100%">
                                                 <tbody>
                                                     <tr class="">
                                                         <td>
-                                                            <i class="fas fa-circle text-dark"> Pending : </i>
+                                                            <i class="fas fa-circle text-dark"> Pending Itin.: </i>
                                                         </td>
 
                                                         <td id="check_mt_pending">
@@ -340,9 +340,22 @@
                                                             <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_pending')"> <i class='fas fa-eye'></i> </a><br>
                                                         </td>
                                                     </tr>
+                                                    <tr class="">
+                                                        <td>
+                                                            <i class="fas fa-circle text-dark"> Pending Meters.: </i>
+                                                        </td>
+
+                                                        <td id="check_mt_meter_pending">
+                                                            -
+                                                        </td>
+
+                                                        <td class="py-1">
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_meter_pending')"> <i class='fas fa-eye'></i> </a><br>
+                                                        </td>
+                                                    </tr>
                                                     <tr>
                                                         <td>
-                                                            <i class="fas fa-unlock text-dark"> Open : </i>
+                                                            <i class="fas fa-unlock text-dark"> Open Itin.: </i>
                                                         </td>
 
                                                         <td id="check_mt_ir003">
@@ -355,14 +368,14 @@
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <i class="fas fa-lock text-dark"> Closed : </i>
+                                                            <i class="fas fa-lock text-dark"> Block Itin.: </i>
                                                         </td>
 
                                                         <td id="check_mt_ir033">
                                                             -
                                                         </td>
 
-                                                        <td>
+                                                        <td class="pt-1">
                                                             <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_ir033')"> <i class='fas fa-eye'></i> </a><br>
                                                         </td>
                                                     </tr>
@@ -370,6 +383,7 @@
                                             </table>
                                         </div>
                                         <div class="timeline-footer text-center">
+                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
                                             <a class="btn btn-primary  btn-sm ml-auto" onclick=""> <i class='fas fa-unlock'></i> </a>
                                             <a class="btn btn-secondary  btn-sm ml-auto" onclick=""> <i class='fas fa-lock'></i> </a>
                                             <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
@@ -380,59 +394,59 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">LECC250</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">LECC250 (Copier)</a> </h3>
 
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:16px;">
                                                 <table class='text-xs w-100'>
-                                                        <tbody>
-                                                            <tr class="p-5">
-                                                                <td>
-                                                                    zfa_f_request(ES003) :
-                                                                </td>
+                                                    <tbody>
+                                                        <tr class="p-5">
+                                                            <td>
+                                                                <i class="fas fa-cogs text-dark"> zfa_f_request(ES003) : </i>
+                                                            </td>
 
-                                                                <td id="check_mt_es003">
-                                                                    -
-                                                                </td>
+                                                            <td id="check_mt_es003">
+                                                                -
+                                                            </td>
 
-                                                                <td class="py-1">
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_es003')"> <i class='fas fa-eye'></i> </a><br>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    ciclos_itin(IR009) :
-                                                                </td>
+                                                            <td class="py-1">
+                                                                <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_es003')"> <i class='fas fa-eye'></i> </a><br>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <i class="fas fa-cogs text-dark"> IR009(Itin. Fermés) : </i>
+                                                            </td>
 
-                                                                <td id="check_mt_ir009">
-                                                                    -
-                                                                </td>
+                                                            <td id="check_mt_ir009">
+                                                                -
+                                                            </td>
 
-                                                                <td class="py-1">
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_ir009')"> <i class='fas fa-eye'></i> </a><br>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    itiner :
-                                                                </td>
+                                                            <td class="py-1">
+                                                                <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_ir009')"> <i class='fas fa-eye'></i> </a><br>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <i class="fas fa-cogs text-dark"> itiner(Compt. Lus) : </i>
+                                                            </td>
 
-                                                                <td id="check_mt_itiner">
-                                                                    -
-                                                                </td>
+                                                            <td id="check_mt_itiner">
+                                                                -
+                                                            </td>
 
-                                                                <td>
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_itiner')"> <i class='fas fa-eye'></i> </a><br>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                            <td class="pt-1">
+                                                                <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('mt_itiner')"> <i class='fas fa-eye'></i> </a><br>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
-                                        <div class="timeline-footer">
+                                        <div class="timeline-footer  text-center">
                                             <a class="btn btn-primary btn-sm" onclick="">Start</a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
                                             <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
+                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
                                         </div>
                                     </div>
                                 </div>
@@ -467,14 +481,14 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Itineraire GBT</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">Checks GBT</a> </h3>
 
                                         <div class="timeline-body">
                                             <table class='text-xs' style="width:100%">
                                                 <tbody>
                                                     <tr class="">
                                                         <td>
-                                                            <i class="fas fa-circle text-dark"> Pending : </i>
+                                                            <i class="fas fa-circle text-dark"> Pending Itin. : </i>
                                                         </td>
 
                                                         <td id="check_gbt_pending">
@@ -485,9 +499,22 @@
                                                             <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_pending')"> <i class='fas fa-eye'></i> </a><br>
                                                         </td>
                                                     </tr>
+                                                    <tr class="">
+                                                        <td>
+                                                            <i class="fas fa-circle text-dark"> Pending Meters. : </i>
+                                                        </td>
+
+                                                        <td id="check_gbt_meter_pending">
+                                                            -
+                                                        </td>
+
+                                                        <td class="py-1">
+                                                            <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_meter_pending')"> <i class='fas fa-eye'></i> </a><br>
+                                                        </td>
+                                                    </tr>
                                                     <tr>
                                                         <td>
-                                                            <i class="fas fa-unlock text-dark"> Open : </i>
+                                                            <i class="fas fa-unlock text-dark"> Open Itin. : </i>
                                                         </td>
 
                                                         <td id="check_gbt_ir003">
@@ -500,14 +527,14 @@
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <i class="fas fa-lock text-dark"> Closed : </i>
+                                                            <i class="fas fa-lock text-dark"> Blocked Itin. : </i>
                                                         </td>
 
                                                         <td id="check_gbt_ir033">
                                                             -
                                                         </td>
 
-                                                        <td>
+                                                        <td class="pt-1">
                                                             <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_ir033')"> <i class='fas fa-eye'></i> </a><br>
                                                         </td>
                                                     </tr>
@@ -515,6 +542,7 @@
                                             </table>
                                         </div>
                                         <div class="timeline-footer text-center">
+                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
                                             <a class="btn btn-primary  btn-sm ml-auto" onclick=""> <i class='fas fa-unlock'></i> </a>
                                             <a class="btn btn-secondary  btn-sm ml-auto" onclick=""> <i class='fas fa-lock'></i> </a>
                                             <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
@@ -544,59 +572,59 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">LECC250</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">LECC250(Copier)</a> </h3>
 
                                         <div class="timeline-body">
                                             <div class="flex" style="display:flex; align-items:center; gap:16px;">
                                                 <table class='text-xs w-100'>
-                                                        <tbody>
-                                                            <tr class="p-5">
-                                                                <td>
-                                                                    zfa_f_request(ES003) :
-                                                                </td>
+                                                    <tbody>
+                                                        <tr class="p-5">
+                                                            <td>
+                                                                <i class="fas fa-cogs text-dark"> zfa_f_request(ES003) :</i>
+                                                            </td>
 
-                                                                <td id="check_gbt_es003">
-                                                                    -
-                                                                </td>
+                                                            <td id="check_gbt_es003">
+                                                                -
+                                                            </td>
 
-                                                                <td class="py-1">
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_es003')"> <i class='fas fa-eye'></i> </a><br>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    ciclos_itin(IR009) :
-                                                                </td>
+                                                            <td class="py-1">
+                                                                <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_es003')"> <i class='fas fa-eye'></i> </a><br>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <i class="fas fa-cogs text-dark"> IR009(Itin. Fermés) : </i>
+                                                            </td>
 
-                                                                <td id="check_gbt_ir009">
-                                                                    -
-                                                                </td>
+                                                            <td id="check_gbt_ir009">
+                                                                -
+                                                            </td>
 
-                                                                <td class="py-1">
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_ir009')"> <i class='fas fa-eye'></i> </a><br>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    itiner :
-                                                                </td>
+                                                            <td class="py-1">
+                                                                <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_ir009')"> <i class='fas fa-eye'></i> </a><br>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <i class="fas fa-cogs text-dark"> itiner(Compteur Lus) : </i>
+                                                            </td>
 
-                                                                <td id="check_gbt_itiner">
-                                                                    -
-                                                                </td>
+                                                            <td id="check_gbt_itiner">
+                                                                -
+                                                            </td>
 
-                                                                <td>
-                                                                    <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_itiner')"> <i class='fas fa-eye'></i> </a><br>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                            <td>
+                                                                <a class="btn btn-info  btn-sm ml-auto" onclick="checkcopy('gbt_itiner')"> <i class='fas fa-eye'></i> </a><br>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
-                                        <div class="timeline-footer">
+                                        <div class="timeline-footer text-center">
                                             <a class="btn btn-primary btn-sm" onclick="">Start</a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
                                             <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
+                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
                                         </div>
                                     </div>
                                 </div>
@@ -604,22 +632,18 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Close Manual Itin. 95%</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">Fermer Manuel. Itin. à 95%</a> </h3>
 
                                         <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
+                                            <div class="form-group">
+                                                <label for=""> <code>Num. Migration</code></label>
+                                                <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
+                                                <input type="number" class="form-control" id="inp_fer_man95" value="0">
                                             </div>
+                                            <a class="btn btn-info btn-block" onclick="fermer_manuel95()">FERMER</a>
                                         </div>
                                         <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">Start</a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
-                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
+                                            <!-- <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a> -->
                                         </div>
                                     </div>
                                 </div>
@@ -627,22 +651,17 @@
                                 <div>
                                     <i class="fas fa-cogs bg-secondary"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"> <a href="#">Close Itin. Last Migration</a> </h3>
+                                        <h3 class="timeline-header"> <a href="#">Fermer Manuel. Dernière Migration</a> </h3>
 
                                         <div class="timeline-body">
-                                            <div class="flex" style="display:flex; align-items:center; gap:16px;">
-                                                <div class="float-left">
-
-                                                </div>
-
-                                                <div class="float-right" id='load_div_lecc300' style="margin-left:auto;">
-                                                </div>
+                                            <div class="form-group">
+                                                <label for=""> <code>Num. Migration</code></label>
+                                                <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
+                                                <input type="number" class="form-control" id="inp_fer_man" value="0">
                                             </div>
+                                            <a class="btn btn-info btn-block" onclick="fermer_manuel()">FERMER</a>
                                         </div>
                                         <div class="timeline-footer">
-                                            <a class="btn btn-primary btn-sm" onclick="">Start</a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
-                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
                                         </div>
                                     </div>
                                 </div>

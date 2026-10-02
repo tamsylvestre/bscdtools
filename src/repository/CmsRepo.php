@@ -182,7 +182,7 @@ class CmsRepository
 
     public function getAll($statement)
     {
-        $conn = $this->dbconnect->getCMSDb();
+        $conn = $this->dbconnect->getCMSBatchDb();
         $stid = oci_parse($conn, $statement);
         oci_execute($stid);
 
