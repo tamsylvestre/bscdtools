@@ -604,6 +604,12 @@ class C_Batch
             $pass = 'Sds@eneo';
         }
 
+        if ($serveur == '33') {
+            $host = '10.241.110.33';
+            $user = 'sys_emoney';
+            $pass = 'src/lib/id_rsa';
+        }
+
 
         $config = [
             'host'    => $host,
@@ -624,7 +630,23 @@ class C_Batch
         set_time_limit(0);
         ignore_user_abort(false);
 
-        $this->runRemote($config);
+        // $this->runRemote($config);
+        try {
+
+            if ($serveur == '33') {
+                $this->runRemoteRSA($config);
+            } else {
+                $this->runRemote($config);
+            }
+        } catch (\Throwable $e) {
+
+            $this->sse(
+                "ERREUR PHP : " . $e->getMessage(),
+                'error'
+            );
+
+            $this->sse('', 'done');
+        }
     }
 
     public function get_bordereau($date)
