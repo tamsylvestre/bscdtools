@@ -741,3 +741,25 @@ async function BlockAnoMT() {
     }
 
 }
+
+async function UpdateItin(itin,status) {
+    // document.getElementById(`block_ano_mt`).innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
+    // await checkbatchMT('block_ano_mt');
+    try {
+        let URL = BASE_URL + `/batch/updateitincopymms/${itin}/${status}`;
+        console.log(URL);
+        document.getElementById(`check_update_itin_${itin}`).innerHTML = '<i class="fas fa-hourglass-half fa-spin"></i>';
+        const response = await fetch(URL);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.text();
+        console.log(data);
+        await checkcopy('mt_ir009');
+        document.getElementById(`check_update_itin_${itin}`).innerHTML = '';
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
+
+}

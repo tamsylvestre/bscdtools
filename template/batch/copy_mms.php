@@ -383,10 +383,14 @@
                                             </table>
                                         </div>
                                         <div class="timeline-footer text-center">
-                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
-                                            <a class="btn btn-primary  btn-sm ml-auto" onclick=""> <i class='fas fa-unlock'></i> </a>
-                                            <a class="btn btn-secondary  btn-sm ml-auto" onclick=""> <i class='fas fa-lock'></i> </a>
-                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info" id='update_itin_2010_IR003'> 
+                                                <!-- <i class='fas fa-spinner fa-spin'></i>  -->
+                                            </a>
+                                            <a class="btn btn-primary  btn-sm ml-auto" onclick="update_itin_copy('2010','IR003','IR033')"> <i class='fas fa-unlock'></i> </a>
+                                            <a class="btn btn-secondary  btn-sm ml-auto" onclick="update_itin_copy('2010','IR033','IR003')"> <i class='fas fa-lock'></i> </a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info" id='update_itin_2010_IR033'> 
+                                                <!-- <i class='fas fa-spinner fa-spin'></i>  -->
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -444,9 +448,11 @@
                                             </div>
                                         </div>
                                         <div class="timeline-footer  text-center">
-                                            <a class="btn btn-primary btn-sm" onclick="">Start</a>
-                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
+                                            <a class="btn btn-primary btn-sm" onclick="startExecution(33,'lecc0250mt','')">Start</a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info" id="load_div_lecc0250mt"> 
+                                                <!-- <i class='fas fa-spinner fa-spin'></i>  -->
+                                            </a>
+                                            <a class="btn btn-danger btn-sm ml-auto" onclick="kill(33,'lecc0250')">Kill</a>
                                         </div>
                                     </div>
                                 </div>
@@ -542,10 +548,14 @@
                                             </table>
                                         </div>
                                         <div class="timeline-footer text-center">
-                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
-                                            <a class="btn btn-primary  btn-sm ml-auto" onclick=""> <i class='fas fa-unlock'></i> </a>
-                                            <a class="btn btn-secondary  btn-sm ml-auto" onclick=""> <i class='fas fa-lock'></i> </a>
-                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info" id='update_itin_2011_IR003'> 
+                                                <!-- <i class='fas fa-spinner fa-spin'></i>  -->
+                                            </a>
+                                            <a class="btn btn-primary  btn-sm ml-auto" onclick="update_itin_copy('2011','IR003','IR033')"> <i class='fas fa-unlock'></i> </a>
+                                            <a class="btn btn-secondary  btn-sm ml-auto" onclick="update_itin_copy('2011','IR033','IR003')"> <i class='fas fa-lock'></i> </a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info" id='update_itin_2011s_IR033'> 
+                                                <!-- <i class='fas fa-spinner fa-spin'></i>  -->
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -622,9 +632,11 @@
                                             </div>
                                         </div>
                                         <div class="timeline-footer text-center">
-                                            <a class="btn btn-primary btn-sm" onclick="">Start</a>
-                                            <a class="btn btn-flat btn-white ml-auto text-info"> <i class='fas fa-spinner fa-spin'></i> </a>
-                                            <a class="btn btn-danger btn-sm ml-auto" onclick="">Kill</a>
+                                            <a class="btn btn-primary btn-sm" onclick="startExecution(33,'lecc0250mt','')">Start</a>
+                                            <a class="btn btn-flat btn-white ml-auto text-info" id="load_div_lecc0250mt"> 
+                                                <!-- <i class='fas fa-spinner fa-spin'></i>  -->
+                                            </a>
+                                            <a class="btn btn-danger btn-sm ml-auto" onclick="kill(33,'lecc0250')">Kill</a>
                                         </div>
                                     </div>
                                 </div>

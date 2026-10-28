@@ -97,7 +97,7 @@ async function startExecution(serveur, batch, args) {
         // setStatus('running', 'Connexion en cours...');
         setLoadIcon(
             batch,
-            '<div class="loader" style="display:block;"></div>'
+            "<i class='fas fa-spinner fa-spin'></i>"
         );
 
         let URL = BASE_URL + `/batch/execute/${serveur}/${batch}/${args}`;
@@ -476,6 +476,26 @@ async function checkcopy(batch) {
         const data = await response.text();
         console.log(data);
         document.getElementById(`check_${batch}`).innerHTML = data;
+    } catch (error) {
+        console.log(error);
+        console.error('Erreur:', error);
+    }
+
+}
+
+async function update_itin_copy(itin,statein,stateout) {
+    document.getElementById(`update_itin_${itin}_${statein}`).innerHTML = "<i class='fas fa-spinner fa-spin'></i>";
+    try {
+        let URL = BASE_URL + `/batch/update_itin_copy/${itin}/${statein}/${stateout}`;
+        console.log(URL);
+        const response = await fetch(URL);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.text();
+        console.log(data);
+        document.getElementById(`update_itin_${itin}_${statein}`).innerHTML = "<i class='fas fa-check'></i>";
     } catch (error) {
         console.log(error);
         console.error('Erreur:', error);

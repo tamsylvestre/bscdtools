@@ -48,7 +48,8 @@ class C_Batch
         'show_anomalie_copie' => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/show_anomalie_copie.sh",
         'scycle162' => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/set-cycle.sh",
         'ccycle162' => "/home/op_ascms/cmsprod/tbatch/cms_mra/prod/check-cycle.sh",
-        'lecc0250mt'  => '/opt/openlink/gencode_batch/bin_amr/set-fechab.sh',
+        'lecc0250mt'  => '/opt/openlink/gencode_batch/bin_amr/run-lecc0250-heat.sh',
+        'lecc0250bt'  => '/opt/openlink/gencode_batch/bin_amr/run-lecc0250-heat.sh'
     ];
 
     private  $KILLS = [
@@ -70,7 +71,8 @@ class C_Batch
         'cb_stprod'  => 'cb_stProd',
         'cb_stext'  => 'cb_stExt',
         'lecc0100' => 'LECC0100',
-        'lecc0200' => 'LECC0200'
+        'lecc0200' => 'LECC0200',
+        'lecc0250' => 'LECC0250'
     ];
 
     private  $CHECKS = [
@@ -964,6 +966,38 @@ class C_Batch
 
     }
 
+    function update_itin_copy($itin,$statein,$stateout)
+    {
+        // var_dump($stateout);
+         $cycle = trim($this->read_server_file_php(33, 'cycle'));
+
+        if (!ctype_digit($cycle)) {
+            throw new Exception("Cycle invalide : [" . $cycle . "]");
+        }
+
+        $cycle = (int) $cycle;
+
+        $params = [
+            'cycle' => $cycle,
+            'itin' => $itin,
+            'statein' => $statein,
+            'stateout' => $stateout
+        ];
+        
+        $statement = "UPDATE ciclos_itin 
+                        SET est_ciclo_itin=:statein 
+                        WHERE num_ciclo=:cycle 
+                        AND est_ciclo_itin=:stateout 
+                        AND num_mrsp=:itin 
+                        AND nl_gen!=0";
+
+
+        $repo = new CmsRepository(new DbConnect());
+        $result = $repo->updateBTCH($statement,$params);
+
+        print $result;
+    }
+
     function upload_anomalie_mt_csv()
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -1190,6 +1224,28 @@ class C_Batch
                                     WHERE a.NUM_APA = i.NUM_APA
                                 )";
 
+
+        $repo = new CmsRepository(new DbConnect());
+        $result = $repo->updateBTCH($statement,$params);
+
+        print $result;
+    }
+
+    function updateitincopymms($itin,$status){
+        $cycle = trim($this->read_server_file_php(162, 'cycle162'));
+
+        if (!ctype_digit($cycle)) {
+            throw new Exception("Cycle invalide : [" . $cycle . "]");
+        }
+
+        $cycle = (int) $cycle;
+
+        $statement = "Update ciclos_itin set est_ciclo_itin=:status where num_ciclo=9 and est_ciclo_itin='IR003' and num_mrsp=:itin and nl_gen!=0";
+        $params = [
+            'cycle' => $cycle,
+            'itin' => $itin,
+            'status' => $status
+        ];
 
         $repo = new CmsRepository(new DbConnect());
         $result = $repo->updateBTCH($statement,$params);
